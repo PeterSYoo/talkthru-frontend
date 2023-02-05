@@ -21,8 +21,8 @@ export const RoomPage = () => {
     <>
       Room id {id}
       <div className="">
-        <VideoPlayer stream={stream} />
         <div className="grid grid-cols-4 gap-4">
+          <VideoPlayer stream={stream} />
           {peers &&
             Object.values(peers as PeersState).map((peer) => (
               <VideoPlayer stream={peer.stream} />
