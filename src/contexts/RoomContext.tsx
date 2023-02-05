@@ -110,7 +110,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
   // Render the RoomContext provider with websocket, peer, and stream as values
   return (
-    <RoomContext.Provider value={{ ws, me, stream }}>
+    <RoomContext.Provider value={{ ws, me, stream, peers }}>
       {children}
     </RoomContext.Provider>
   );
