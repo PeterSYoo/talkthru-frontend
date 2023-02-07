@@ -3,13 +3,14 @@ import { useParams } from 'react-router-dom';
 import { VideoPlayer } from '../components/VideoPlayer.components';
 import { PeersState } from '../contexts/peersReducer';
 import { RoomContext } from '../contexts/RoomContext';
+import { ShareScreenButton } from '../components/ShareScreenButton';
 
 export const RoomPage = () => {
   // Destructure the `id` from the URL parameters using `useParams` hook.
   const { id } = useParams();
 
   // Destructure the required values from the `RoomContext` using the `useContext` hook.
-  const { ws, me, stream, peers } = useContext(RoomContext);
+  const { ws, me, stream, peers, shareScreen } = useContext(RoomContext);
 
   // Use the `useEffect` hook to join the room when the `me` object is available.
   useEffect(() => {
@@ -27,6 +28,9 @@ export const RoomPage = () => {
             Object.values(peers as PeersState).map((peer) => (
               <VideoPlayer stream={peer.stream} />
             ))}
+        </div>
+        <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2">
+          <ShareScreenButton onClick={shareScreen}/>
         </div>
       </div>
     </>
