@@ -47,6 +47,13 @@ export const RoomProvider = ({ children }: { children: any }) => {
     dispatch(removePeerAction(peerId));
   };
 
+  // Function to set the user's display as their stream
+  const shareScreen = () => {
+    navigator.mediaDevices.getDisplayMedia({}).then((display) => {
+      setStream(display);
+    })
+  };
+
   // useEffect hook initializes the local peer and media stream
   useEffect(() => {
     // Generate a unique ID for the local peer
@@ -110,7 +117,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
   // Render the RoomContext provider with websocket, peer, and stream as values
   return (
-    <RoomContext.Provider value={{ ws, me, stream, peers }}>
+    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen }}>
       {children}
     </RoomContext.Provider>
   );
