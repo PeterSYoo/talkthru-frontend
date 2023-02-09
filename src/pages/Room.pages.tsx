@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { VideoPlayer } from '../components/VideoPlayer.components';
 import { PeersState } from '../contexts/peersReducer';
 import { RoomContext } from '../contexts/RoomContext';
-import { ShareScreenButton } from '../components/ShareScreenButton';
-import { ChatButton } from '../components/ChatButton';
+import { ShareScreenButton } from '../components/ShareScreenButton.components';
+import { ChatButton } from '../components/ChatButton.components';
 
 export const RoomPage = () => {
   // Destructure the `id` from the URL parameters using `useParams` hook.
