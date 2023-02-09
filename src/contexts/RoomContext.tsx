@@ -121,6 +121,16 @@ export const RoomProvider = ({ children }: { children: any }) => {
     ws.on('user-disconnected', removePeer);
     ws.on('user-shared-screen', (peerId) => setScreenSharingId(peerId));
     ws.on('user-shared-screen', () => setScreenSharingId(''));
+
+    // Unsubscribe from all events when the component ummounts to prevent memory leak
+    return () => {
+      ws.off('room-created');
+      ws.off('get-users');
+      ws.off('user-disconnected');
+      ws.off('user-shared-screen');
+      ws.off('user-shared-screen');
+      ws.off('user-joined'); 
+    }
   }, []);
 
   useEffect(() => {
