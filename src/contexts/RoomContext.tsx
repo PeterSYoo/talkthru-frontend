@@ -25,6 +25,11 @@ export const RoomProvider = ({ children }: { children: any }) => {
   const [stream, setStream] = useState<MediaStream>();
   // State managed by the peer reducer to store all connected peers
   const [peers, dispatch] = useReducer(peersReducer, {});
+  // State to keep track of the peer who is currently screen sharing
+  const [screenSharingId, setScreenSharingId] = useState<string>("");
+  // State to keep track of the connections between all peers
+  // You can correlate connections[i].peer to the keys in peers state
+  const [connections, setConnections] = useState<any[]>([]);
 
   // Function to navigate to a specific room page
   const enterRoom = ({ roomId }: { roomId: string }) => {
@@ -45,13 +50,46 @@ export const RoomProvider = ({ children }: { children: any }) => {
   const removePeer = (peerId: string) => {
     // Dispatching an action to remove the peer from the state
     dispatch(removePeerAction(peerId));
+
+    // Update connections state by removing the connection to peerId
+    setConnections((prevState) => prevState.filter((connection) => connection.peer !== peerId));
+  };
+
+  // Function to update the stream for local and remote peers
+  const switchStream = (newStream: MediaStream) => {
+    // Updates stream state
+    setStream(newStream);
+    // Uses optional chaining to set state as the peer's id or empty string
+    setScreenSharingId(me?.id || "");
+
+    // Store the video track of newStream to update all remote peer connections
+    const videoTrack = newStream.getVideoTracks()[0];
+
+    Object.values(connections).forEach((connection) => {
+      // Access the RTCPeerConnection between local peer and remote peer
+      connection.peerConnection
+        // Get the RTCRtpSender that handles video streaming -> senders[0: audio, 1: video]
+        .getSenders()[1]
+        // Start sending newStream's videoTrack
+        .replaceTrack(videoTrack)
+        .catch((err: any) => console.error(err))
+      });
   };
 
   // Function to set the user's display as their stream
   const shareScreen = () => {
-    navigator.mediaDevices.getDisplayMedia({}).then((display) => {
-      setStream(display);
-    })
+    // Check if screen share is enabled
+    if (screenSharingId) {
+      // Enabled -> Revert local peer's media to default webcam
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then(switchStream);
+    } else {
+      // Not enabled -> Start screen share
+      navigator.mediaDevices
+        .getDisplayMedia({})
+        .then(switchStream);
+    }
   };
 
   // useEffect hook initializes the local peer and media stream
@@ -93,6 +131,9 @@ export const RoomProvider = ({ children }: { children: any }) => {
     ws.on('user-joined', ({ peerId }) => {
       // Make an outbound call to the new peer using their peerId and the local media stream
       const call = me.call(peerId, stream);
+      // Store call/connection object in state
+      setConnections((prevState) => [...prevState, call]);
+
       // Register an event listener for the peer stream
       call.on('stream', (peerStream) => {
         // Dispatch an action to add the new peer stream to the peers state
