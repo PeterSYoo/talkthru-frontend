@@ -119,7 +119,13 @@ export const RoomProvider = ({ children }: { children: any }) => {
     ws.on('room-created', enterRoom);
     ws.on('get-users', getUsers);
     ws.on('user-disconnected', removePeer);
+    ws.on('user-shared-screen', (peerId) => setScreenSharingId(peerId));
+    ws.on('user-shared-screen', () => setScreenSharingId(''));
   }, []);
+
+  useEffect(() => {
+    ws.emit("start-sharing", { peerId: screenSharingId });
+  }, [screenSharingId]);
 
   // useEffect to handle incoming calls and outgoing calls
   useEffect(() => {
@@ -158,7 +164,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
   // Render the RoomContext provider with websocket, peer, and stream as values
   return (
-    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen }}>
+    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen, screenSharingId }}>
       {children}
     </RoomContext.Provider>
   );
