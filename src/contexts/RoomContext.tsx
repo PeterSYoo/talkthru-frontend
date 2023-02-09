@@ -30,6 +30,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
   // State to keep track of the connections between all peers
   // You can correlate connections[i].peer to the keys in peers state
   const [connections, setConnections] = useState<any[]>([]);
+  // State to keep track of the room ID for the local peer
+  const [roomId, setRoomId] = useState<string>('');
 
   // Function to navigate to a specific room page
   const enterRoom = ({ roomId }: { roomId: string }) => {
@@ -119,23 +121,29 @@ export const RoomProvider = ({ children }: { children: any }) => {
     ws.on('room-created', enterRoom);
     ws.on('get-users', getUsers);
     ws.on('user-disconnected', removePeer);
-    ws.on('user-shared-screen', (peerId) => setScreenSharingId(peerId));
-    ws.on('user-shared-screen', () => setScreenSharingId(''));
+    ws.on('user-started-sharing', (peerId) => setScreenSharingId(peerId));
+    ws.on('user-stopped-sharing', () => setScreenSharingId(''));
 
     // Unsubscribe from all events when the component ummounts to prevent memory leak
     return () => {
       ws.off('room-created');
       ws.off('get-users');
       ws.off('user-disconnected');
-      ws.off('user-shared-screen');
-      ws.off('user-shared-screen');
+      ws.off('user-started-sharing');
+      ws.off('user-stopped-sharing');
       ws.off('user-joined'); 
     }
   }, []);
 
+  // This useEffect executes when a peer starts/stops sharing their screen or local peer leaves the room
   useEffect(() => {
-    ws.emit("start-sharing", { peerId: screenSharingId });
-  }, [screenSharingId]);
+    // Check if a peer started sharing their screen
+    if (screenSharingId) {
+      ws.emit("start-sharing", { peerId: screenSharingId, roomId });
+    } else {
+      ws.emit("stop-sharing");
+    }
+  }, [screenSharingId, roomId]);
 
   // useEffect to handle incoming calls and outgoing calls
   useEffect(() => {
@@ -174,7 +182,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
   // Render the RoomContext provider with websocket, peer, and stream as values
   return (
-    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen, screenSharingId }}>
+    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen, screenSharingId, setRoomId }}>
       {children}
     </RoomContext.Provider>
   );

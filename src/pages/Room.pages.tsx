@@ -10,13 +10,18 @@ export const RoomPage = () => {
   const { id } = useParams();
 
   // Destructure the required values from the `RoomContext` using the `useContext` hook.
-  const { ws, me, stream, peers, shareScreen } = useContext(RoomContext);
+  const { ws, me, stream, peers, shareScreen, screenSharingId, setRoomId } = useContext(RoomContext);
 
   // Use the `useEffect` hook to join the room when the `me` object is available.
   useEffect(() => {
     // If the `me` object is available, emit a 'join-room' event with the `roomId` and `peerId` to the WebSocket.
     if (me) ws.emit('join-room', { roomId: id, peerId: me._id });
   }, [id, me, ws]);
+
+  // Updates roomId state when local peer joins/leaves a room
+  useEffect(() => {
+    setRoomId(id);
+  }, [id, setRoomId]);
 
   return (
     <>
