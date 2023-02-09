@@ -4,6 +4,7 @@ import { VideoPlayer } from '../components/VideoPlayer.components';
 import { PeersState } from '../contexts/peersReducer';
 import { RoomContext } from '../contexts/RoomContext';
 import { ShareScreenButton } from '../components/ShareScreenButton';
+import { ChatButton } from '../components/ChatButton';
 
 export const RoomPage = () => {
   // Destructure the `id` from the URL parameters using `useParams` hook.
@@ -54,6 +55,7 @@ export const RoomPage = () => {
       </div>
       <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2">
         <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId}/>
+        <ChatButton onClick={() => {}}/>
       </div>
     </>
   );
