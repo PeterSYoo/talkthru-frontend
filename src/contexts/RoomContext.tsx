@@ -61,8 +61,9 @@ export const RoomProvider = ({ children }: { children: any }) => {
   const switchStream = (newStream: MediaStream) => {
     // Updates stream state
     setStream(newStream);
-    // Uses optional chaining to set state as the peer's id or empty string
-    setScreenSharingId(me?.id || "");
+    // Uses ternary operator to to update state when stop/start sharing is triggered
+    // For 'false' condition, 'me?.id' could be undefined, which is not a valid type for state so it defaults to empty string
+    setScreenSharingId(screenSharingId ? "" : me?.id || "");
 
     // Store the video track of newStream to update all remote peer connections
     const videoTrack = newStream.getVideoTracks()[0];
