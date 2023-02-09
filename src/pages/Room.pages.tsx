@@ -53,7 +53,7 @@ export const RoomPage = () => {
         </div>
       </div>
       <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2">
-        <ShareScreenButton onClick={shareScreen}/>
+        <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId}/>
       </div>
     </>
   );
