@@ -4,8 +4,8 @@ import { RoomContext } from "../../contexts/RoomContext";
 // Type definition for a message
 interface IMessage {
   content: string;
-  author: string;
-  timestamp: string;
+  author?: string;
+  timestamp: number;
 }
 
 export const ChatBubble: React.FC<{message: IMessage}> = ({message}) => {

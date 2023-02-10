@@ -4,8 +4,8 @@ import { ChatInput } from "./ChatInput.components";
 // Type definition for a message
 interface IMessage {
   content: string;
-  author: string;
-  timestamp: string;
+  author?: string;
+  timestamp: number;
 }
 
 export const Chat: React.FC = ({}) => {
@@ -15,12 +15,12 @@ export const Chat: React.FC = ({}) => {
     {
       content: "First message",
       author: '',
-      timestamp: '',
+      timestamp: 0,
     },
     {
       content: "Second message",
       author: '',
-      timestamp: '',
+      timestamp: 0,
     },
   ];
 
