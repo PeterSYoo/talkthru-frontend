@@ -5,6 +5,7 @@ import { PeersState } from '../contexts/peersReducer';
 import { RoomContext } from '../contexts/RoomContext';
 import { ShareScreenButton } from '../components/ShareScreenButton.components';
 import { ChatButton } from '../components/ChatButton.components';
+import { Chat } from '../components/chat/Chat.components';
 
 export const RoomPage = () => {
   // Destructure the `id` from the URL parameters using `useParams` hook.
@@ -33,29 +34,33 @@ export const RoomPage = () => {
 
   return (
     <>
-      Room id {id}
-      <div className="flex">
-        {/* Primary screen */}
-          <div className="w-4/5 pr-4">
-            {/* Conditionally sets primary screen to the shared video or local user's video */}
-            <VideoPlayer stream={screenSharingVideo || stream} />
+      <div className="flex flex-col min-h-screen">
+        <div className="bg-blue-500 p-4 text-white">Room id: {id}</div>
+        <div className="flex grow">
+          {/* Primary screen */}
+            <div className="w-4/5 pr-4">
+              {/* Conditionally sets primary screen to the shared video or local user's video */}
+              <VideoPlayer stream={screenSharingVideo || stream} />
+            </div>
+
+          {/* Peer screens */}
+          <div className="w-1/5 grid gap-4 grid-col-1">
+            {/* Includes local stream in-line with peers if it isn't being shared */}
+            {screenSharingId && screenSharingId !== me?.id &&
+              <VideoPlayer stream={stream} />
+            }
+            {peers &&
+              Object.values(peersToShow as PeersState).map((peer) => (
+                <VideoPlayer stream={peer.stream} />
+            ))}
           </div>
 
-        {/* Peer screens */}
-        <div className="w-1/5 grid gap-4 grid-col-1">
-          {/* Includes local stream in-line with peers if it isn't being shared */}
-          {screenSharingId && screenSharingId !== me?.id &&
-            <VideoPlayer stream={stream} />
-          }
-          {peers &&
-            Object.values(peersToShow as PeersState).map((peer) => (
-              <VideoPlayer stream={peer.stream} />
-          ))}
+          <div className="border-l-2 pb-28"><Chat /></div>
         </div>
-      </div>
-      <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2">
-        <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId}/>
-        <ChatButton onClick={() => {}}/>
+        <div className="h-28 fixed bottom-0 p-6 w-full flex justify-center border-t-2 bg-white">
+          <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId}/>
+          <ChatButton onClick={() => {}}/>
+        </div>
       </div>
     </>
   );
