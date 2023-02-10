@@ -6,6 +6,13 @@ import { v4 as uuidV4 } from 'uuid';
 import { addPeerAction, removePeerAction } from './peersActions';
 import { peersReducer } from './peersReducer';
 
+// Type definition for a message
+interface IMessage {
+  content: string;
+  author?: string;
+  timestamp: number;
+}
+
 // Constant for the web socket URL
 const WS = 'http://localhost:8080';
 
@@ -95,6 +102,24 @@ export const RoomProvider = ({ children }: { children: any }) => {
     }
   };
 
+  // Function to emit chat message to websocket server when onSubmit triggers in ChatInput
+  const sendMessage = (message: string) => {
+    // Construct IMessage to emit
+    const messageData: IMessage = {
+      content: message,
+      author: me?.id,
+      timestamp: new Date().getTime(),
+    }
+
+    // Emit event with data
+    ws.emit("send-message", roomId, messageData);
+  };
+
+  // Function to post messages to peers' chat
+  const addMessage = (message: IMessage) => {
+    console.log(message);
+  };
+
   // useEffect hook initializes the local peer and media stream
   useEffect(() => {
     // Generate a unique ID for the local peer
@@ -124,6 +149,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
     ws.on('user-disconnected', removePeer);
     ws.on('user-started-sharing', (peerId) => setScreenSharingId(peerId));
     ws.on('user-stopped-sharing', () => setScreenSharingId(''));
+    ws.on('add-message', addMessage);
+    ws.on('get-messages', (chatLog) => console.log({chatLog}))
 
     // Unsubscribe from all events when the component ummounts to prevent memory leak
     return () => {
@@ -132,7 +159,9 @@ export const RoomProvider = ({ children }: { children: any }) => {
       ws.off('user-disconnected');
       ws.off('user-started-sharing');
       ws.off('user-stopped-sharing');
-      ws.off('user-joined'); 
+      ws.off('user-joined');
+      ws.off('add-message');
+      ws.off('get-messages');
     }
   }, []);
 
@@ -183,7 +212,18 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
   // Render the RoomContext provider with websocket, peer, and stream as values
   return (
-    <RoomContext.Provider value={{ ws, me, stream, peers, shareScreen, screenSharingId, setRoomId }}>
+    <RoomContext.Provider
+      value={{
+        ws, 
+        me,
+        stream, 
+        peers,
+        shareScreen,
+        screenSharingId,
+        setRoomId,
+        sendMessage 
+      }}
+    >
       {children}
     </RoomContext.Provider>
   );
