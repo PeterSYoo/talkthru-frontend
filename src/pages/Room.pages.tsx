@@ -55,6 +55,9 @@ export const RoomPage = () => {
       <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2">
         <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId}/>
       </div>
+      <div>
+        <a href={`/room/${id}/postmeeting`}>Leave Room</a>
+      </div>
     </>
   );
 };
