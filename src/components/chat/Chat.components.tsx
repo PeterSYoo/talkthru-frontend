@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { RoomContext } from "../../contexts/RoomContext";
 import { ChatBubble } from "./ChatBubble.components";
 import { ChatInput } from "./ChatInput.components";
 
@@ -9,25 +11,13 @@ interface IMessage {
 }
 
 export const Chat: React.FC = ({}) => {
-  // Stores all messages from chat
-  // Dummy data --> REMOVE BEFORE PUSH
-  const messages: IMessage[] = [
-    {
-      content: "First message",
-      author: '',
-      timestamp: 0,
-    },
-    {
-      content: "Second message",
-      author: '',
-      timestamp: 0,
-    },
-  ];
+  // Destructure the required values from `RoomContext` using the `useContext` hook.
+  const { chat } = useContext(RoomContext);
 
   return (
     <div className="flex flex-col h-full justify-between">
       <div>
-        {messages.map((message) => (
+        {chat.messages.map((message: IMessage) => (
           <ChatBubble message={message}/>
         ))}
       </div>
