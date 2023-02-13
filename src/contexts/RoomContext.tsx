@@ -5,6 +5,8 @@ import { io } from 'socket.io-client';
 import { v4 as uuidV4 } from 'uuid';
 import { addPeerAction, removePeerAction } from './peersActions';
 import { peersReducer } from './peersReducer';
+import { addMessageAction, addHistoryAction } from './chatActions';
+import { chatReducer } from './chatReducer';
 
 // Type definition for a message
 interface IMessage {
@@ -39,6 +41,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
   const [connections, setConnections] = useState<any[]>([]);
   // State to keep track of the room ID for the local peer
   const [roomId, setRoomId] = useState<string>('');
+  // State managed by the chat reducer to keep track of chat messages for a room
+  const [chat, chatDispatch] = useReducer(chatReducer, { messages: [] });
 
   // Function to navigate to a specific room page
   const enterRoom = ({ roomId }: { roomId: string }) => {
@@ -104,21 +108,29 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
   // Function to emit chat message to websocket server when onSubmit triggers in ChatInput
   const sendMessage = (message: string) => {
-    // Construct IMessage to emit
+    // Construct new IMessage object
     const messageData: IMessage = {
       content: message,
       author: me?.id,
       timestamp: new Date().getTime(),
     }
 
+    // Update chat state
+    chatDispatch(addMessageAction(messageData));
+
     // Emit event with data
     ws.emit("send-message", roomId, messageData);
   };
 
-  // Function to post messages to peers' chat
+  // Function to update chat state with a new message
   const addMessage = (message: IMessage) => {
-    console.log(message);
+    chatDispatch(addMessageAction(message));
   };
+
+  // Function to update chat state with old messages for new peers
+  const addHistory = (messages: IMessage[]) => {
+    chatDispatch(addHistoryAction(messages));
+  }
 
   // useEffect hook initializes the local peer and media stream
   useEffect(() => {
@@ -150,7 +162,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
     ws.on('user-started-sharing', (peerId) => setScreenSharingId(peerId));
     ws.on('user-stopped-sharing', () => setScreenSharingId(''));
     ws.on('add-message', addMessage);
-    ws.on('get-messages', (chatLog) => console.log({chatLog}))
+    ws.on('get-messages', addHistory);
 
     // Unsubscribe from all events when the component ummounts to prevent memory leak
     return () => {
@@ -221,7 +233,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
         shareScreen,
         screenSharingId,
         setRoomId,
-        sendMessage 
+        sendMessage,
+        chat
       }}
     >
       {children}
