@@ -1,4 +1,4 @@
-import { ADD_MESSAGE, ADD_HISTORY } from './chatActions';
+import { ADD_MESSAGE, ADD_HISTORY, TOGGLE_CHAT } from './chatActions';
 
 // Type definition for a message
 interface IMessage {
@@ -10,9 +10,10 @@ interface IMessage {
 // Define the type of the ChatState object
 export type ChatState = {
   messages: IMessage[];
+  isChatOpen: boolean;
 };
 
-// Define the type of the ChatAction object, which is a union of two different action objects
+// Define the type of the ChatAction object, which is a union of the different available action objects
 type ChatAction =
   | {
       // Action object with type ADD_MESSAGE and payload object with property message
@@ -23,22 +24,34 @@ type ChatAction =
       // Action object with type ADD_HISTORY and payload object with property history
       type: typeof ADD_HISTORY;
       payload: { history: IMessage[] };
-    };
+    }
+  | {
+    // Action object with type TOGGLE_CHAT and payload object with property isOpen
+    type: typeof TOGGLE_CHAT;
+    payload: { isOpen: boolean };
+  };
 
 // Exports the chatReducer function, which is a reducer that updates the ChatState object
 export const chatReducer = (state: ChatState, action: ChatAction) => {
+  // Uses switch statement to handle the different action types
   switch (action.type) {
-    // Handle the ADD_MESSAGE action type
     case ADD_MESSAGE:
+      // Updates state with the a new message
       return {
         ...state,
         messages: [...state.messages, action.payload.message]
       };
-    // Handle the ADD_HISTORY action type
     case ADD_HISTORY:
+      // Updates state with a room's chat history
       return {
         ...state,
         messages: action.payload.history,
+      };
+    case TOGGLE_CHAT:
+      // Updates state to open/close chat
+      return {
+        ...state,
+        isChatOpen: action.payload.isOpen,
       };
     // Return the existing state object by default
     default:

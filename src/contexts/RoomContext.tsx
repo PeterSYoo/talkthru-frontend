@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 import { v4 as uuidV4 } from 'uuid';
 import { addPeerAction, removePeerAction } from './peersActions';
 import { peersReducer } from './peersReducer';
-import { addMessageAction, addHistoryAction } from './chatActions';
+import { addMessageAction, addHistoryAction, toggleChatAction } from './chatActions';
 import { chatReducer } from './chatReducer';
 
 // Type definition for a message
@@ -42,7 +42,10 @@ export const RoomProvider = ({ children }: { children: any }) => {
   // State to keep track of the room ID for the local peer
   const [roomId, setRoomId] = useState<string>('');
   // State managed by the chat reducer to keep track of chat messages for a room
-  const [chat, chatDispatch] = useReducer(chatReducer, { messages: [] });
+  const [chat, chatDispatch] = useReducer(chatReducer, {
+    messages: [],
+    isChatOpen: false,
+  });
 
   // Function to navigate to a specific room page
   const enterRoom = ({ roomId }: { roomId: string }) => {
@@ -130,6 +133,11 @@ export const RoomProvider = ({ children }: { children: any }) => {
   // Function to update chat state with old messages for new peers
   const addHistory = (messages: IMessage[]) => {
     chatDispatch(addHistoryAction(messages));
+  };
+
+  // Function to update chat state to the opposite of what it currently is
+  const toggleChat = () => {
+    chatDispatch(toggleChatAction(!chat.isChatOpen));
   }
 
   // useEffect hook initializes the local peer and media stream
@@ -234,7 +242,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
         screenSharingId,
         setRoomId,
         sendMessage,
-        chat
+        chat,
+        toggleChat
       }}
     >
       {children}

@@ -5,13 +5,12 @@ interface IMessage {
   timestamp: number;
 }
 
-// Action type constant for adding a chat message
+// Define/export constants for each action type
 export const ADD_MESSAGE = 'ADD_MESSAGE' as const;
-
-// Action type constant for adding the chat history
 export const ADD_HISTORY = 'ADD_HISTORY' as const;
+export const TOGGLE_CHAT = 'TOGGLE_CHAT' as const;
 
-// Action creator functionfor adding a chat message
+// Action creator function for adding a chat message
 export const addMessageAction = (message: IMessage) => ({
   // The action type
   type: ADD_MESSAGE,
@@ -27,4 +26,10 @@ export const addHistoryAction = (history: IMessage[]) => ({
   payload: { history },
 });
 
-// The actions created above, addMessageAction and AddHistoryAction, can be used with the useReducer hook to update the state in your component. When you dispatch an action using useReducer, the reducer function will receive the current state and the action, and return the new state based on the type of the action and its payload.
+// Action creator function for toggling between an open or closed chat
+export const toggleChatAction = (isOpen: boolean) => ({
+  type: TOGGLE_CHAT,
+  payload: { isOpen },
+});
+
+// The actions created above can be used with the useReducer hook to update the state in your component. When you dispatch an action using useReducer, the reducer function will receive the current state and the action, and return the new state based on the type of the action and its payload.

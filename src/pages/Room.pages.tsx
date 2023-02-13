@@ -12,7 +12,7 @@ export const RoomPage = () => {
   const { id } = useParams();
 
   // Destructure the required values from the `RoomContext` using the `useContext` hook.
-  const { ws, me, stream, peers, shareScreen, screenSharingId, setRoomId } = useContext(RoomContext);
+  const { ws, me, stream, peers, shareScreen, screenSharingId, setRoomId, chat, toggleChat } = useContext(RoomContext);
 
   // Use the `useEffect` hook to join the room when the `me` object is available.
   useEffect(() => {
@@ -31,6 +31,8 @@ export const RoomPage = () => {
 
   // Destructure 'peers' state object
   const { [screenSharingId]: sharing, ...peersToShow } = peers;
+
+  console.log({chat});
 
   return (
     <>
@@ -54,12 +56,13 @@ export const RoomPage = () => {
                 <VideoPlayer stream={peer.stream} />
             ))}
           </div>
-
-          <div className="border-l-2 pb-28"><Chat /></div>
+          {chat.isChatOpen && (
+            <div className="border-l-2 pb-28"><Chat /></div>
+          )}
         </div>
         <div className="h-28 fixed bottom-0 p-6 w-full flex justify-center border-t-2 bg-white">
           <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId}/>
-          <ChatButton onClick={() => {}}/>
+          <ChatButton onClick={toggleChat}/>
         </div>
       </div>
     </>
