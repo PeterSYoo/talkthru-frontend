@@ -15,7 +15,7 @@ export const ChatBubble: React.FC<{message: IMessage}> = ({message}) => {
   const isSelf = message.author === me?.id;
 
   return (
-    <div className={`m-2 flx ${isSelf ? "pl-10 justify-end" : "pr-10 justify-start"}`}>
+    <div className={`m-2 flex ${isSelf ? "pl-10 justify-end" : "pr-10 justify-start"}`}>
       <div className={`inline-block py-2 px-4 rounded ${isSelf ? "bg-gray-200" : "bg-gray-400"}`}>
         {message.content}
       </div>
