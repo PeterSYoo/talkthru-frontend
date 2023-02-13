@@ -54,9 +54,9 @@ export const SignUpPage = () => {
                 <button onClick={register}>Register</button>
                 <p>or</p>
                 <button onClick={signInWithGoogle}>Register with Google</button>
-            </div>
-            <div>
+                <div>
                 <p>Already have an account? Login <Link to="/login">here</Link></p>
+                </div>
             </div>
         </>
     )
