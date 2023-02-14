@@ -10,7 +10,6 @@ export const HomePage = () => {
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate('/');
