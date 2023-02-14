@@ -17,8 +17,10 @@ export const RoomPage = () => {
   // Use the `useEffect` hook to join the room when the `me` object is available.
   useEffect(() => {
     // If the `me` object is available, emit a 'join-room' event with the `roomId` and `peerId` to the WebSocket.
-    if (me) ws.emit('join-room', { roomId: id, peerId: me._id, userName });
-  }, [id, me, ws]);
+    if (me && stream) {
+      ws.emit('join-room', { roomId: id, peerId: me._id, userName });
+    }
+  }, [id, me, ws, stream]);
 
   // Updates roomId state when local peer joins/leaves a room
   useEffect(() => {
