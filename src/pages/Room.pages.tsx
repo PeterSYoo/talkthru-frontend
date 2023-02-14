@@ -12,12 +12,12 @@ export const RoomPage = () => {
   const { id } = useParams();
 
   // Destructure the required values from the `RoomContext` using the `useContext` hook.
-  const { ws, me, stream, peers, shareScreen, screenSharingId, setRoomId, chat, toggleChat } = useContext(RoomContext);
+  const { ws, me, userName, stream, peers, shareScreen, screenSharingId, setRoomId, chat, toggleChat } = useContext(RoomContext);
 
   // Use the `useEffect` hook to join the room when the `me` object is available.
   useEffect(() => {
     // If the `me` object is available, emit a 'join-room' event with the `roomId` and `peerId` to the WebSocket.
-    if (me) ws.emit('join-room', { roomId: id, peerId: me._id });
+    if (me) ws.emit('join-room', { roomId: id, peerId: me._id, userName });
   }, [id, me, ws]);
 
   // Updates roomId state when local peer joins/leaves a room
@@ -31,8 +31,9 @@ export const RoomPage = () => {
 
   // Destructure 'peers' state object
   const { [screenSharingId]: sharing, ...peersToShow } = peers;
-
-  console.log({chat});
+  // console.log({screenSharingId});
+  // console.log({screenSharingVideo});
+  // console.log({sharing});
 
   return (
     <>
@@ -40,20 +41,29 @@ export const RoomPage = () => {
         <div className="bg-blue-500 p-4 text-white">Room id: {id}</div>
         <div className="flex grow">
           {/* Primary screen */}
-            <div className="w-4/5 pr-4">
-              {/* Conditionally sets primary screen to the shared video or local user's video */}
-              <VideoPlayer stream={screenSharingVideo || stream} />
-            </div>
+          <div className="w-4/5 pr-4">
+            {/* Conditionally sets primary screen to the shared video or local user's video */}
+            <VideoPlayer stream={screenSharingVideo || stream} />
+            {!screenSharingId || screenSharingId === me?.id ?
+              userName :
+              peers[screenSharingId].userName
+            }
+          </div>
 
           {/* Peer screens */}
           <div className="w-1/5 grid gap-4 grid-col-1">
             {/* Includes local stream in-line with peers if it isn't being shared */}
             {screenSharingId && screenSharingId !== me?.id &&
-              <VideoPlayer stream={stream} />
+              <div>
+                <VideoPlayer stream={stream} />
+                <div>{userName}</div>
+              </div>
             }
-            {peers &&
-              Object.values(peersToShow as PeersState).map((peer) => (
+            {Object.values(peersToShow as PeersState).map((peer) => (
+              <div>
                 <VideoPlayer stream={peer.stream} />
+                <div>{peer.userName}</div>
+              </div>
             ))}
           </div>
           {chat.isChatOpen && (

@@ -3,7 +3,7 @@ import { createContext, useEffect, useState, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { v4 as uuidV4 } from 'uuid';
-import { addPeerAction, removePeerAction } from './peersActions';
+import { addPeerStreamAction, addPeerNameAction, removePeerStreamAction } from './peersActions';
 import { peersReducer } from './peersReducer';
 import { addMessageAction, addHistoryAction, toggleChatAction } from './chatActions';
 import { chatReducer } from './chatReducer';
@@ -30,6 +30,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
   const navigate = useNavigate();
   // State to store the local peer
   const [me, setMe] = useState<Peer>();
+  // State to keep track of user's name --> TEMPORARILY USING DUMMY DATA
+  const [userName, setUserName] = useState(`User${Math.floor(Math.random() * 1000)}`);
   // State to store the local media stream
   const [stream, setStream] = useState<MediaStream>();
   // State managed by the peer reducer to store all connected peers
@@ -65,7 +67,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
   // Function to remove a peer from the application's state
   const removePeer = (peerId: string) => {
     // Dispatching an action to remove the peer from the state
-    dispatch(removePeerAction(peerId));
+    dispatch(removePeerStreamAction(peerId));
 
     // Update connections state by removing the connection to peerId
     setConnections((prevState) => prevState.filter((connection) => connection.peer !== peerId));
@@ -138,13 +140,19 @@ export const RoomProvider = ({ children }: { children: any }) => {
   // Function to update chat state to the opposite of what it currently is
   const toggleChat = () => {
     chatDispatch(toggleChatAction(!chat.isChatOpen));
-  }
+  };
+
+  useEffect(() => {
+    localStorage.setItem("userName", userName);
+  }, [userName]);
 
   // useEffect hook initializes the local peer and media stream
   useEffect(() => {
-    // Generate a unique ID for the local peer
-    const meId = uuidV4();
-    // Create a new Peer instance with the generated ID
+    // Use stored 'userId' or generate a new ID -> Store user's ID
+    const meId = localStorage.getItem("userId") || uuidV4();
+    localStorage.setItem('userId', meId);
+
+    // Create a new Peer instance with user's ID
     const peer = new Peer(meId);
 
     // Store the local peer instance in the state
@@ -202,30 +210,38 @@ export const RoomProvider = ({ children }: { children: any }) => {
     if (!stream) return;
 
     // Register an event listener for a new peer joining
-    ws.on('user-joined', ({ peerId }) => {
+    ws.on('user-joined', ({ peerId, userName: name }) => {
+      dispatch(addPeerNameAction(peerId, name));
       // Make an outbound call to the new peer using their peerId and the local media stream
-      const call = me.call(peerId, stream);
+      // Passing data that other peers need to know as 'metadata' property
+      const call = me.call(peerId, stream, {
+        metadata: { userName },
+      });
       // Store call/connection object in state
       setConnections((prevState) => [...prevState, call]);
 
       // Register an event listener for the peer stream
       call.on('stream', (peerStream) => {
         // Dispatch an action to add the new peer stream to the peers state
-        dispatch(addPeerAction(peerId, peerStream));
+        dispatch(addPeerStreamAction(peerId, peerStream));
       });
     });
 
     // Register an event listener for incoming calls
     me.on('call', (call) => {
+      // Update peer state with user's Id
+      const { userName } = call.metadata;
+      dispatch(addPeerNameAction(call.peer, userName));
+
       // Answer the incoming call with the local media stream
       call.answer(stream);
       // Register an event listener for the peer stream
       call.on('stream', (peerStream) => {
         // Dispatch an action to add the incoming peer stream to the peers state
-        dispatch(addPeerAction(call.peer, peerStream));
+        dispatch(addPeerStreamAction(call.peer, peerStream));
       });
     });
-  }, [me, stream]);
+  }, [me, stream, userName]);
 
   // Log the current state of peers to the console
   console.log({ peers });
@@ -236,6 +252,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
       value={{
         ws, 
         me,
+        userName,
+        setUserName,
         stream, 
         peers,
         shareScreen,

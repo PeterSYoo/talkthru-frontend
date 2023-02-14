@@ -1,21 +1,28 @@
-// Action type constant for adding a peer
-export const ADD_PEER = 'ADD_PEER' as const;
-
-// Action type constant for removing a peer
-export const REMOVE_PEER = 'REMOVE_PEER' as const;
+// Define/export constants for the different action types
+export const ADD_PEER_STREAM = 'ADD_PEER_STREAM' as const;
+export const ADD_PEER_NAME = 'ADD_PEER_NAME' as const;
+export const REMOVE_PEER_STREAM = 'REMOVE_PEER_STREAM' as const;
 
 // Action creator function for adding a peer
-export const addPeerAction = (peerId: string, stream: MediaStream) => ({
+export const addPeerStreamAction = (peerId: string, stream: MediaStream) => ({
   // The action type
-  type: ADD_PEER,
+  type: ADD_PEER_STREAM,
   // The action payload with the peerId and stream
   payload: { peerId, stream },
 });
 
-// Action creator function for removing a peer
-export const removePeerAction = (peerId: string) => ({
+// Action creator function for adding a peer
+export const addPeerNameAction = (peerId: string, userName: string) => ({
   // The action type
-  type: REMOVE_PEER,
+  type: ADD_PEER_NAME,
+  // The action payload with the peerId and stream
+  payload: { peerId, userName },
+});
+
+// Action creator function for removing a peer
+export const removePeerStreamAction = (peerId: string) => ({
+  // The action type
+  type: REMOVE_PEER_STREAM,
   // The action payload with the peerId
   payload: { peerId },
 });
