@@ -1,12 +1,24 @@
+import { ChatStudyConnect } from '../components/landing-page/ChatStudyConnect.components';
+import { EnjoyYourSession } from '../components/landing-page/EnjoyYourSession.components';
+import { GetMatched } from '../components/landing-page/GetMatched.components';
+import { JoinTheTalkThruCommunityNow } from '../components/landing-page/JoinTheTalkThruCommunityNow.components';
+import { SearchForASubject } from '../components/landing-page/SearchForASubject.components';
+
 export const SplashPage = () => {
-    return (
-        <>
-            <div className="w-full h-full bg-blue-100 flex flex-col justify-center items-center">
-                <h1>Splash Page</h1>
-                <a href="/login"><button>Login</button></a>
-                <p>or</p>
-                <a href="/signup"><button>Sign Up</button></a>
-            </div>
-        </>
-    )
-}
+  return (
+    <>
+      <div className="flex flex-col justify-center items-center font-poppins">
+        {/* Chat Study Connect */}
+        <ChatStudyConnect />
+        {/* Search for a subject */}
+        <SearchForASubject />
+        {/* Get matched */}
+        <GetMatched />
+        {/* Enjoy your session */}
+        <EnjoyYourSession />
+        {/* Join the TalkThru community now */}
+        <JoinTheTalkThruCommunityNow />
+      </div>
+    </>
+  );
+};
