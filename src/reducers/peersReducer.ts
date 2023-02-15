@@ -34,9 +34,8 @@ type PeersAction =
 			};
 	  };
 
-// Define/export reducer that manages the PeersState object
+// Define/export reducer that handles the PeersState object based on the action type that is dispatched
 export const peersReducer = (state: PeersState, action: PeersAction) => {
-	// Switch statement to handle each action type and payload differently
 	switch (action.type) {
 		// Adds/updates the stream for the given peerId in state
 		case ADD_PEER_STREAM:
@@ -58,7 +57,7 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 			};
 		// Removes peer object that correlates with peerId from state
 		case REMOVE_PEER_STREAM:
-			// Use destructuring to isolate the peer object that needs to be removed from the other peers in state
+			// Use destructuring to isolate the peer object that needs to be deleted from the other peers in state
 			const { [action.payload.peerId]: deleted, ...rest } = state;
 			return rest;
 		// Return the existing state object by default

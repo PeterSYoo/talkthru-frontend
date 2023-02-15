@@ -29,13 +29,11 @@ type ChatAction =
 			payload: { isOpen: boolean };
 	  };
 
-// Define/export reducer that manages the ChatState object
+// Define/export reducer that handles the ChatState object based on the action type that is dispatched
 export const chatReducer = (state: ChatState, action: ChatAction) => {
-	// Switch statement to handle each action type and payload differently
 	switch (action.type) {
 		// Adds the new message to state
 		case ADD_MESSAGE:
-			// Updates state with the a new message
 			return {
 				...state,
 				messages: [...state.messages, action.payload.message],
