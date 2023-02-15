@@ -77,6 +77,9 @@ export const RoomPage = () => {
           <ChatButton onClick={toggleChat}/>
         </div>
       </div>
+      <div>
+        <a href={`/room/${id}/postmeeting`}>Leave Room</a>
+      </div>
     </>
   );
 };
