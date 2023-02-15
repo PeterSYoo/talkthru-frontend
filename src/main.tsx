@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { UserProvider } from './contexts/UserContext';
 import { RoomProvider } from './contexts/RoomContext';
+import { ChatProvider } from './contexts/ChatContext';
 import './index.css';
 import { SplashPage } from './pages/Splash.pages';
 import { LoginPage } from './pages/Login.pages';
@@ -14,21 +16,30 @@ import { WaitingRoomPage } from './pages/WaitingRoom.pages';
 import { ResetPage } from './pages/Reset.pages';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <BrowserRouter>
-    <RoomProvider>
-      <div className="">
-        <Routes>
-          <Route path="/" element={<SplashPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/reset" element={<ResetPage />} />
-          <Route path="/profile/:id" element={<ProfilePage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/waitingroom" element={<WaitingRoomPage />} />
-          <Route path="/room/:id" element={<RoomPage />} />
-          <Route path="/room/:id/postmeeting" element={<PostMeetingPage />} />
-        </Routes>
-      </div>
-    </RoomProvider>
-  </BrowserRouter>
+	<BrowserRouter>
+		<UserProvider>
+			<RoomProvider>
+				<div className=''>
+					<Routes>
+						<Route path='/' element={<SplashPage />} />
+						<Route path='/login' element={<LoginPage />} />
+						<Route path='/signup' element={<SignUpPage />} />
+						<Route path='/reset' element={<ResetPage />} />
+						<Route path='/profile/:id' element={<ProfilePage />} />
+						<Route path='/home' element={<HomePage />} />
+						<Route path='/waitingroom' element={<WaitingRoomPage />} />
+						<Route
+							path='/room/:id'
+							element={
+								<ChatProvider>
+									<RoomPage />
+								</ChatProvider>
+							}
+						/>
+						<Route path='/room/:id/postmeeting' element={<PostMeetingPage />} />
+					</Routes>
+				</div>
+			</RoomProvider>
+		</UserProvider>
+	</BrowserRouter>
 );
