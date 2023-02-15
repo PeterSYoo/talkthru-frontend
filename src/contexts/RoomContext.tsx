@@ -3,10 +3,10 @@ import { createContext, useEffect, useState, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { v4 as uuidV4 } from 'uuid';
-import { addPeerStreamAction, addPeerNameAction, removePeerStreamAction } from './peersActions';
-import { peersReducer } from './peersReducer';
-import { addMessageAction, addHistoryAction, toggleChatAction } from './chatActions';
-import { chatReducer } from './chatReducer';
+import { addPeerStreamAction, addPeerNameAction, removePeerStreamAction } from '../reducers/peersActions';
+import { peersReducer } from '../reducers/peersReducer';
+import { addMessageAction, addHistoryAction, toggleChatAction } from '../reducers/chatActions';
+import { chatReducer } from '../reducers/chatReducer';
 
 // Type definition for a message
 interface IMessage {
