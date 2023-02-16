@@ -52,10 +52,12 @@ export const ChatProvider = ({ children }: { children: any }) => {
 		chatDispatch(toggleChatAction(!chat.isChatOpen));
 	};
 
+	// Handles event listeners
 	useEffect(() => {
 		webSocket.on('add-message', addMessage);
 		webSocket.on('get-messages', addHistory);
 
+		// Unsubscribe from listeners to prevent memory leaks
 		return () => {
 			webSocket.off('add-message');
 			webSocket.off('get-messages');

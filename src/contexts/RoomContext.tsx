@@ -48,11 +48,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		navigate(`/room/${roomId}`);
 	};
 
-	// Function to retrieve and log the list of participants in a room
+	// Function to update 'peers' state with the list of participants in a room
 	const getUsers = ({ participants }: { participants: Record<string, IPeer> }) => {
-		// Logging the list of participants to the console
-		// console.log({ participants });
-
 		dispatch(addAllPeersAction(participants));
 	};
 
@@ -151,13 +148,13 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		}
 	}, [screenSharingId, roomId]);
 
-	// useEffect to handle incoming calls and outgoing calls
+	// useEffect to handle incoming and outgoing calls
 	useEffect(() => {
 		// Exit if me or stream is not defined
 		if (!me) return;
 		if (!stream) return;
 
-		// Register an event listener for a new peer joining
+		// Register an event listener for a new peer joining the room
 		webSocket.on('user-joined', ({ peerId, userName: name }) => {
 			// Make an outbound call to the new peer using their peerId and the local media stream
 			// Passing data that other peers need to know as 'metadata' property
@@ -167,9 +164,11 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 			// Register an event listener for the peer stream
 			call.on('stream', (peerStream) => {
-				// Dispatch an action to add the new peer stream to the peers state
+				// Dispatch an action to add/update the new peer stream to peers state
 				dispatch(addPeerStreamAction(peerId, peerStream));
 			});
+
+			// Dispatch an action to add the new peer name to the peers state
 			dispatch(addPeerNameAction(peerId, name));
 
 			// Store call/connection object in state
