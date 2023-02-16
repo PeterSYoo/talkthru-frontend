@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth,
     GoogleAuthProvider,
     signInWithPopup,
@@ -18,6 +17,9 @@ import {
     addDoc
 } from 'firebase/firestore';
 import { useInRouterContext } from "react-router-dom";
+import firebase from 'firebase/app';
+import { json } from "stream/consumers";
+import { string } from "prop-types";
 
 
 // Your web app's Firebase configuration
@@ -37,6 +39,28 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Create PlanetScale User Function
+const createPScaleUser = async (name: string, email: string) => {
+    const user = auth.currentUser;
+    const token = await user?.getIdToken();
+
+    const response = await fetch('http://localhost:8080/users', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email })
+    })
+
+    if (!response.ok) {
+        throw new Error('Error creating user');
+    }
+
+    return response.json;
+
+}
+
 // Google Auth SignIn Function
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
@@ -45,7 +69,10 @@ const signInWithGoogle = async () => {
         const user = res.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
         const docs = await getDocs(q);
+        const email = user.email;
+        const name = user.displayName;
         if(docs.docs.length === 0) {
+            await createPScaleUser(`${user.displayName}`, `${user.email}`);
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
                 name: user.displayName,
@@ -72,6 +99,7 @@ const registerWithEmailAndPassword = async (name: string, email: string, passwor
     try {
         const res = await createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
+        await createPScaleUser(name, email);
         await addDoc(collection(db, "users"), {
             uid: user.uid,
             name,

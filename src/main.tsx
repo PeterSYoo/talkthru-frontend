@@ -14,11 +14,13 @@ import { SignUpPage } from './pages/SignUp.pages';
 import { PostMeetingPage } from './pages/PostMeeting.pages';
 import { WaitingRoomPage } from './pages/WaitingRoom.pages';
 import { ResetPage } from './pages/Reset.pages';
+import { Header } from './components/Header.components';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<BrowserRouter>
 		<UserProvider>
 			<RoomProvider>
+        <Header />
 				<div className=''>
 					<Routes>
 						<Route path='/' element={<SplashPage />} />
