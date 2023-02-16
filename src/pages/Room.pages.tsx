@@ -16,7 +16,8 @@ export const RoomPage = () => {
 
 	// Destructure context for the props we need
 	const { userName, userId } = useContext(UserContext);
-	const { stream, peers, shareScreen, screenSharingId, setRoomId } = useContext(RoomContext);
+	const { stream, screenStream, screenSharingId, peers, shareScreen, setRoomId } =
+		useContext(RoomContext);
 	const { chat, toggleChat } = useContext(ChatContext);
 
 	// Emits 'join-room' event after 'stream' object is available
@@ -33,9 +34,10 @@ export const RoomPage = () => {
 
 	// Ternary to determine which peer is sharing their screen
 	// If there isn't a screenSharingId or screenSharingId matches local peer's id -> use 'stream' in state
-	const screenSharingVideo = screenSharingId === userId ? stream : peers[screenSharingId]?.stream;
+	const screenSharingVideo =
+		screenSharingId === userId ? screenStream : peers[screenSharingId]?.stream;
 
-	// Destructure 'peers' state object
+	// Destructure 'peers' state object to filter peers
 	const { [screenSharingId]: sharing, ...peersToShow } = peers;
 	// console.log({screenSharingId});
 	// console.log({screenSharingVideo});
@@ -64,12 +66,14 @@ export const RoomPage = () => {
 								<div>{userName}</div>
 							</div>
 						)}
-						{Object.values(peersToShow as PeersState).map((peer) => (
-							<div>
-								<VideoPlayer stream={peer.stream} />
-								<div>{peer.userName}</div>
-							</div>
-						))}
+						{Object.values(peersToShow as PeersState)
+							.filter((peer) => !!peer.stream)
+							.map((peer) => (
+								<div>
+									<VideoPlayer stream={peer.stream} />
+									<div>{peer.userName}</div>
+								</div>
+							))}
 					</div>
 					{chat.isChatOpen && (
 						<div className='border-l-2 pb-28'>
