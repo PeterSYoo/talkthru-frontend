@@ -6,9 +6,15 @@ import {
 	addPeerStreamAction,
 	addPeerNameAction,
 	removePeerStreamAction,
+	addAllPeersAction,
 } from '../reducers/peersActions';
 import { peersReducer } from '../reducers/peersReducer';
 import { UserContext } from './UserContext';
+
+interface IPeer {
+	userName: string;
+	peerId: string;
+}
 
 // Create a context for sharing data across components
 export const RoomContext = createContext<null | any>(null);
@@ -22,10 +28,12 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [me, setMe] = useState<Peer>();
 	// State to store the local media stream
 	const [stream, setStream] = useState<MediaStream>();
-	// State to keep track of data for remote peers
-	const [peers, dispatch] = useReducer(peersReducer, {});
+	// State to keep track of the stream to share when screen sharing
+	const [screenStream, setScreenStream] = useState<MediaStream>();
 	// State to keep track of the peer who is currently screen sharing
 	const [screenSharingId, setScreenSharingId] = useState<string>('');
+	// State to keep track of data for remote peers
+	const [peers, dispatch] = useReducer(peersReducer, {});
 	// State to keep track of the room ID for the local peer
 	const [roomId, setRoomId] = useState<string>('');
 	// State to keep track of the connections between all peers
@@ -37,17 +45,15 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 	// Function to navigate to a specific room page
 	const enterRoom = ({ roomId }: { roomId: string }) => {
-		// Logging the room id to the console
-		console.log({ roomId });
-
-		// Navigating to the room page
 		navigate(`/room/${roomId}`);
 	};
 
 	// Function to retrieve and log the list of participants in a room
-	const getUsers = ({ participants }: { participants: string[] }) => {
+	const getUsers = ({ participants }: { participants: Record<string, IPeer> }) => {
 		// Logging the list of participants to the console
-		console.log({ participants });
+		// console.log({ participants });
+
+		dispatch(addAllPeersAction(participants));
 	};
 
 	// Function to remove a peer from the application's state
@@ -61,8 +67,6 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 	// Function to update the stream for local and remote peers
 	const switchStream = (newStream: MediaStream) => {
-		// Updates stream state
-		setStream(newStream);
 		// Uses ternary operator to to update state when stop/start sharing is triggered
 		// For 'false' condition, 'me?.id' could be undefined, which is not a valid type for state so it defaults to empty string
 		setScreenSharingId(screenSharingId ? '' : userId || '');
@@ -86,10 +90,15 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		// Check if screen share is enabled
 		if (screenSharingId) {
 			// Enabled -> Revert local peer's media to default webcam
-			navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(switchStream);
+			navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+				switchStream(stream);
+			});
 		} else {
 			// Not enabled -> Start screen share
-			navigator.mediaDevices.getDisplayMedia({}).then(switchStream);
+			navigator.mediaDevices.getDisplayMedia({}).then((stream) => {
+				switchStream(stream);
+				setScreenStream(stream);
+			});
 		}
 	};
 
@@ -127,10 +136,12 @@ export const RoomProvider = ({ children }: { children: any }) => {
 			webSocket.off('user-started-sharing');
 			webSocket.off('user-stopped-sharing');
 			webSocket.off('user-joined');
+			me?.disconnect();
 		};
 	}, []);
 
-	// This useEffect executes when a peer starts/stops sharing their screen or local peer leaves the room
+	// Screen Sharing
+	// Executes when a peer starts/stops sharing their screen or local peer leaves the room
 	useEffect(() => {
 		// Check if a peer started sharing their screen
 		if (screenSharingId) {
@@ -148,20 +159,21 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 		// Register an event listener for a new peer joining
 		webSocket.on('user-joined', ({ peerId, userName: name }) => {
-			dispatch(addPeerNameAction(peerId, name));
 			// Make an outbound call to the new peer using their peerId and the local media stream
 			// Passing data that other peers need to know as 'metadata' property
 			const call = me.call(peerId, stream, {
 				metadata: { userName },
 			});
-			// Store call/connection object in state
-			setConnections((prevState) => [...prevState, call]);
 
 			// Register an event listener for the peer stream
 			call.on('stream', (peerStream) => {
 				// Dispatch an action to add the new peer stream to the peers state
 				dispatch(addPeerStreamAction(peerId, peerStream));
 			});
+			dispatch(addPeerNameAction(peerId, name));
+
+			// Store call/connection object in state
+			setConnections((prevState) => [...prevState, call]);
 		});
 
 		// Register an event listener for incoming calls
@@ -178,20 +190,27 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				dispatch(addPeerStreamAction(call.peer, peerStream));
 			});
 		});
+
+		return () => {
+			webSocket.off('user-joined');
+		};
 	}, [me, stream, userName]);
 
 	// Log the current state of peers to the console
-	console.log({ peers });
+	// console.log({ me });
+	// console.log({ peers });
+	// console.log({ screenSharingId });
+	// console.log({ connections });
 
 	// Render the RoomContext provider with websocket, peer, and stream as values
 	return (
 		<RoomContext.Provider
 			value={{
-				me,
 				stream,
+				screenStream,
+				screenSharingId,
 				peers,
 				shareScreen,
-				screenSharingId,
 				setRoomId,
 			}}>
 			{children}
