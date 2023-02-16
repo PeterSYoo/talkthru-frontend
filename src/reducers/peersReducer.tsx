@@ -1,4 +1,4 @@
-import { ADD_PEER_STREAM, ADD_PEER_NAME, REMOVE_PEER_STREAM } from './peersActions';
+import { ADD_PEER_STREAM, ADD_PEER_NAME, REMOVE_PEER_STREAM, ADD_ALL_PEERS } from './peersActions';
 
 // Define/export the type for the PeersState object
 export type PeersState = Record<
@@ -9,6 +9,11 @@ export type PeersState = Record<
 		userName?: string;
 	}
 >;
+
+interface IPeer {
+	userName: string;
+	peerId: string;
+}
 
 // Define the acceptable action object types for the PeersAction object
 // These types correlate with their respective creator functions in peersActions
@@ -31,6 +36,12 @@ type PeersAction =
 			type: typeof REMOVE_PEER_STREAM;
 			payload: {
 				peerId: string;
+			};
+	  }
+	| {
+			type: typeof ADD_ALL_PEERS;
+			payload: {
+				peers: Record<string, IPeer>;
 			};
 	  };
 
@@ -60,6 +71,9 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 			// Use destructuring to isolate the peer object that needs to be deleted from the other peers in state
 			const { [action.payload.peerId]: deleted, ...rest } = state;
 			return rest;
+		// Updates state with all nonlocal peers in the room
+		case ADD_ALL_PEERS:
+			return { ...state, ...action.payload.peers };
 		// Return the existing state object by default
 		default:
 			return { ...state };

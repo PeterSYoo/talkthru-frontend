@@ -1,7 +1,13 @@
 // Define/export constants for the different action types
 export const ADD_PEER_STREAM = 'ADD_PEER_STREAM' as const;
-export const ADD_PEER_NAME = 'ADD_PEER_NAME' as const;
 export const REMOVE_PEER_STREAM = 'REMOVE_PEER_STREAM' as const;
+export const ADD_PEER_NAME = 'ADD_PEER_NAME' as const;
+export const ADD_ALL_PEERS = 'ADD_ALL_PEERS' as const;
+
+interface IPeer {
+	userName: string;
+	peerId: string;
+}
 
 // Define/export creator functions for each action type
 // These functions are used with the useReducer hook to update the state of a component
@@ -19,4 +25,9 @@ export const addPeerNameAction = (peerId: string, userName: string) => ({
 export const removePeerStreamAction = (peerId: string) => ({
 	type: REMOVE_PEER_STREAM,
 	payload: { peerId },
+});
+
+export const addAllPeersAction = (peers: Record<string, IPeer>) => ({
+	type: ADD_ALL_PEERS,
+	payload: { peers },
 });
