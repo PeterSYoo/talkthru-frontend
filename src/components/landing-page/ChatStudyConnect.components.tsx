@@ -3,26 +3,23 @@ export const ChatStudyConnect = () => {
     <>
       <div className="h-screen w-full">
         {/* Main */}
-        <div className="flex flex-col bg-white h-full">
-          <div className="flex justify-center items-center gap-[129px] h-full">
+        <div className="flex h-full flex-col bg-white">
+          <div className="flex h-full items-center justify-center gap-[129px]">
             {/* Info Text */}
             <div>
               {/* Heading */}
-              <h1 className="text-[60px] font-bold max-w-[370px] leading-[70.38px]">
+              <h1 className="max-w-[429px] text-[60px] font-bold leading-[70.38px]">
                 Chat
-                <span className="text-[#E4E325]">.</span> Study
-                <span className="text-[#E4E325]">.</span> Connect
                 <span className="text-[#E4E325]">.</span>
               </h1>
               {/* Paragraph */}
-              <p className="max-w-[509px] text-[22px] font-medium leading-[25.81px] pt-[66px]">
-                Need support when it comes to your
-                <br /> studies? Want to work things through with a<br /> peer?
-                Create an account to access our service
-                <br /> and get connected with someone now!
+              <p className="max-w-[509px] pt-[88px] text-[22px] font-medium leading-[25.81px]">
+                Need support when it comes to your studies? Want to work things
+                through with a peer? Create an account to access our service and
+                get connected with someone now!
               </p>
               {/* Sign Up Button */}
-              <button className="w-[395px] h-[50px] border-2 border-[#F1F192] bg-[#F1F192] rounded-[30px] flex justify-center items-center text-[25px] font-medium mt-[47px]">
+              <button className="mt-[47px] flex h-[50px] w-[395px] items-center justify-center rounded-[30px] border-2 border-[#F1F192] bg-[#F1F192] text-[25px] font-medium">
                 Sign Up
               </button>
             </div>
@@ -36,10 +33,11 @@ export const ChatStudyConnect = () => {
           </div>
           <div className="flex flex-col items-center gap-[21px] pb-[33px]">
             <div>
-              <button>
+              <button className="flex h-[65px] w-[65px] justify-center rounded-full bg-[#17153A]">
                 <img
-                  src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676329558/TalkThru/Landing%20Page/down_arrow_kf61rx.png"
+                  src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676767452/TalkThru/Landing%20Page/down_vector_m7rq5j.png"
                   alt="down-button"
+                  className="animate-updown origin-bottom transform"
                 />
               </button>
             </div>

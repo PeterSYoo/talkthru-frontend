@@ -1,7 +1,7 @@
 export const EnjoyYourSession = () => {
   return (
     <>
-      <div className="h-screen w-full bg-[#17153A] flex justify-center items-center">
+      <div className="flex h-screen w-full items-center justify-center bg-[#17153A]">
         <div className="flex items-center gap-[111px]">
           {/* Image */}
           <div>
@@ -11,20 +11,19 @@ export const EnjoyYourSession = () => {
             />
           </div>
           {/* Info Text */}
-          <div className="flex flex-col max-w-[615px] gap-[41px]">
+          <div className="flex max-w-[615px] flex-col gap-[41px]">
             {/* Heading */}
-            <h1 className="text-[60px] leading-[90px] font-bold text-white">
+            <h1 className="text-[60px] font-bold leading-[90px] text-white">
               Enjoy your session
             </h1>
             {/* Paragraph */}
-            <p className="text-[22px] text-white leading-[33px] font-medium">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam augue
-              tellus, euismod vitae velit at, convallis sollicitudin nibh.
-              Suspendisse eget rhoncus mauris. Quisque eu est eu lorem ultricies
-              porttitor eu at sapien. Phasellus sapien sem, venenatis sit amet
-              pretium in, blandit sed ligula. Aenean in est felis. Ut placerat
-              risus lacinia nulla suscipit laoreet. Maecenas nec ullamcorper
-              leo.
+            <p className="text-[22px] font-medium leading-[33px] text-white">
+              Meet your new partner, and get to know their study habits. Are
+              they struggling with a certain topic, or is there something you
+              need help with? Ask away, and chat! TalkThru aims to make sure you
+              get academic support you need. Enjoy our video chatting features,
+              including the ability to share your device’s screen with your
+              partner.
             </p>
           </div>
         </div>
