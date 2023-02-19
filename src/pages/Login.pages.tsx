@@ -20,7 +20,7 @@ export const LoginPage = () => {
 
   return (
     <>
-      <div className="h-screen w-full flex justify-center items-center font-poppins pt-[88px]">
+      <div className="w-full h-full flex justify-center items-center">
         {/* Login Form */}
         <div className="flex flex-col max-w-[570px] max-h-[888px] w-full border border-gray-400 rounded-[50px] shadow-md shadow-gray-500 pt-[68px] pb-[34px] px-[83px]">
           {/* Heading */}
