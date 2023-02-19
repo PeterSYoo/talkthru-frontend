@@ -1,5 +1,5 @@
 import { CreateButton } from '../components/CreateButton.components';
-import { ChooseSubject } from '../components/waiting-room/ChooseSubject.components';
+import { ChooseSubject } from '../components/pre-meeting/ChooseSubject.components';
 
 export const PreMeetingPage = () => {
   // Choose subject and experience level for new chat
