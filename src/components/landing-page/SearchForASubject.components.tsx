@@ -1,7 +1,7 @@
 export const SearchForASubject = () => {
   return (
     <>
-      <div className="h-screen w-full bg-[#17153A] flex justify-center items-center">
+      <div className="flex h-screen w-full items-center justify-center bg-[#17153A]">
         <div className="flex items-center gap-[111px]">
           {/* Image */}
           <div>
@@ -11,13 +11,13 @@ export const SearchForASubject = () => {
             />
           </div>
           {/* Info Text */}
-          <div className="flex flex-col max-w-[616px] gap-[41px]">
+          <div className="flex max-w-[616px] flex-col gap-[41px]">
             {/* Heading */}
-            <h1 className="text-[60px] leading-[90px] font-bold text-white">
+            <h1 className="text-[60px] font-bold leading-[90px] text-white">
               Search for a subject
             </h1>
             {/* Paragraph */}
-            <p className="text-[22px] text-white leading-[33px] font-medium">
+            <p className="text-[22px] font-medium leading-[33px] text-white">
               After you successfully log in, or create an account if you’re a
               new member to our platform, you will begin your peer-finding
               journey by searching for your relevant field of study. From

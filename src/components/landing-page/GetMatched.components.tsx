@@ -21,16 +21,16 @@ export const GetMatched = () => {
 
   return (
     <>
-      <div className="h-screen w-full flex justify-center items-center">
+      <div className="flex h-screen w-full items-center justify-center">
         <div className="flex items-center gap-[48px]">
           {/* Info Text */}
-          <div className="flex flex-col max-w-[658px] gap-[54px]">
+          <div className="flex max-w-[658px] flex-col gap-[54px]">
             {/* Heading */}
-            <h1 className="text-[60px] leading-[90px] font-bold">
+            <h1 className="text-[60px] font-bold leading-[90px]">
               Get matched
             </h1>
             {/* Paragraph */}
-            <p className="text-[22px] leading-[33px] font-medium">
+            <p className="text-[22px] font-medium leading-[33px]">
               After searching for a subject, choose a skill level for your
               selected field. TalkThru’s technology will then match you with a
               random study partner. Once matched, you will be shown a preview of
@@ -45,7 +45,7 @@ export const GetMatched = () => {
                 alt=""
                 className={`${
                   isImage2Visible ? 'scale-100' : 'scale-0'
-                } relative top-[190px] left-[20px] transition-transform duration-500 transform`}
+                } relative top-[190px] left-[20px] transform transition-transform duration-500`}
                 style={{ opacity: isImage2Visible ? 1 : 0 }}
               />
               <img
@@ -53,7 +53,7 @@ export const GetMatched = () => {
                 alt=""
                 className={`${
                   isImage1Visible ? 'scale-100' : 'scale-0'
-                } relative top-[118px] left-[76px] transition-transform duration-500 transform`}
+                } relative top-[118px] left-[76px] transform transition-transform duration-500`}
                 style={{ opacity: isImage1Visible ? 1 : 0 }}
               />
             </div>
