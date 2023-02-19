@@ -31,7 +31,7 @@ export const SignUpPage = () => {
 
   return (
     <>
-      <div className="h-screen w-full flex justify-center items-center font-poppins pt-[88px]">
+      <div className="w-full h-full flex justify-center items-center">
         {/* Create an Account */}
         <div className="flex flex-col max-w-[570px] max-h-[888px] w-full border border-gray-400 rounded-[50px] shadow-md shadow-gray-500 pt-[68px] pb-[34px] px-[83px]">
           {/* Heading */}
@@ -77,7 +77,10 @@ export const SignUpPage = () => {
           {/* Sign Up & Google Button */}
           <div className="flex flex-col gap-[22px] mt-[60px]">
             {/* Sign Up Button */}
-            <button className="w-[395px] h-[50px] bg-[#F1F192] rounded-full flex justify-center items-center text-[25px] font-medium" onClick={register}>
+            <button
+              className="w-[395px] h-[50px] bg-[#F1F192] rounded-full flex justify-center items-center text-[25px] font-medium"
+              onClick={register}
+            >
               Sign Up
             </button>
             <p className="text-[22px] font-bold mx-auto">OR</p>
@@ -87,7 +90,10 @@ export const SignUpPage = () => {
                 src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676338774/TalkThru/Landing%20Page/logos_google-icon_pe5kng.png"
                 alt="google icon"
               />
-              <span className="text-[25px] font-medium" onClick={signInWithGoogle}>
+              <span
+                className="text-[25px] font-medium"
+                onClick={signInWithGoogle}
+              >
                 Continue with Google
               </span>
             </button>
