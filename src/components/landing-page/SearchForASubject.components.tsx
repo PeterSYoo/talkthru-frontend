@@ -18,13 +18,11 @@ export const SearchForASubject = () => {
             </h1>
             {/* Paragraph */}
             <p className="text-[22px] text-white leading-[33px] font-medium">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam augue
-              tellus, euismod vitae velit at, convallis sollicitudin nibh.
-              Suspendisse eget rhoncus mauris. Quisque eu est eu lorem ultricies
-              porttitor eu at sapien. Phasellus sapien sem, venenatis sit amet
-              pretium in, blandit sed ligula. Aenean in est felis. Ut placerat
-              risus lacinia nulla suscipit laoreet. Maecenas nec ullamcorper
-              leo.
+              After you successfully log in, or create an account if you’re a
+              new member to our platform, you will begin your peer-finding
+              journey by searching for your relevant field of study. From
+              mechanical engineering to biomedical sciences, TalkThru wants to
+              help you help connect you with a friend!
             </p>
           </div>
         </div>
