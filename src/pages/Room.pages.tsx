@@ -49,13 +49,13 @@ export const RoomPage = () => {
 			{/* Container */}
 			<div className='h-full w-full flex flex-col relative'>
 				{/* Big screen */}
-				<div className='max-h-screen max-w-screen flex items-center overflow-hidden'>
+				<div className='h-full w-full absolute'>
 					{/* Conditionally sets big screen to the shared video or local user's video */}
 					<PrimaryDisplay stream={screenSharingVideo || stream} />
 				</div>
 
 				{/* Options */}
-				<div className='absolute top-[145px] left-[75px] flex flex-col gap-[16px]'>
+				<div className='absolute top-[64px] left-[75px] flex flex-col gap-[16px]'>
 					{/* Full Screen */}
 					<div className='flex flex-col justify-center items-center m-[10px] gap-[10px]'>
 						<img
@@ -76,10 +76,10 @@ export const RoomPage = () => {
 				</div>
 
 				{/* Timer */}
-				<div className='absolute top-[120px] left-[50%]'>Timer</div>
+				<div className='absolute top-[32px] left-[50%]'>Timer</div>
 
 				{/* Small screen */}
-				<div className='h-[154px] w-[224px] absolute top-[145px] right-[80px] bg-[#C5C5C5] border border-solid rounded-md border-[#0B0A1D] shadow-meeting-room flex flex-col justify-start items-center pt-[25px]'>
+				<div className='h-[154px] w-[224px] absolute top-[64px] right-[80px] bg-[#C5C5C5] border border-solid rounded-md border-[#0B0A1D] shadow-meeting-room flex flex-col justify-start items-center pt-[25px]'>
 					{/* No Local Stream */}
 					<div className='flex flex-col items-center relative'>
 						<img

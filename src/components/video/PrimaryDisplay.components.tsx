@@ -15,7 +15,7 @@ export const PrimaryDisplay: React.FC<{ stream?: MediaStream }> = ({ stream }) =
 	// and set its `ref` to the `videoRef` created earlier.
 	return (
 		<>
-			<video ref={videoRef} autoPlay muted className='h-full w-full' />
+			<video ref={videoRef} autoPlay muted className='h-full w-full object-fill' />
 		</>
 	);
 };
