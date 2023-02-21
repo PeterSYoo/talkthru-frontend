@@ -48,26 +48,26 @@ export const LoginPage = () => {
                 placeholder="Password"
                 className="w-full border border-gray-400 rounded-md h-[53px] focus:outline-none px-2"
               />
-              <p className="text-[15px] font-medium pt-1">
+              <Link to="/reset"><p className="text-[15px] font-medium pt-1">
                 Forgot your password?
-              </p>
+              </p></Link>
             </label>
           </div>
           {/* Sign Up & Google Button */}
           <div className="flex flex-col gap-[22px] mt-[60px]">
             {/* Sign Up Button */}
-            <button className="w-[395px] h-[50px] bg-[#F1F192] rounded-full flex justify-center items-center text-[25px] font-medium">
-              Sign Up
+            <button onClick={()=>logInWithEmailAndPassword(email, password)} className="w-[395px] h-[50px] bg-[#F1F192] rounded-full flex justify-center items-center text-[25px] font-medium">
+              Login
             </button>
             <p className="text-[22px] font-bold mx-auto">OR</p>
             {/* Google Continue Button */}
-            <button className="w-[395px] h-[50px] border border-gray-400 rounded-full flex justify-center items-center gap-[37px]">
+            <button onClick={signInWithGoogle} className="w-[395px] h-[50px] border border-gray-400 rounded-full flex justify-center items-center gap-[37px]">
               <img
                 src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676338774/TalkThru/Landing%20Page/logos_google-icon_pe5kng.png"
                 alt="google icon"
               />
               <span className="text-[25px] font-medium">
-                Continue with Google
+                Sign in with Google
               </span>
             </button>
           </div>
@@ -82,9 +82,9 @@ export const LoginPage = () => {
               </span>
             </p>
             <p className="text-[15px] text-center">
-              Already registered?&nbsp;
+              Don't have an account yet?&nbsp;
               <span className="font-bold">
-                <Link to="/login">Login.</Link>
+                <Link to="/signup">Register here.</Link>
               </span>
             </p>
           </div>
