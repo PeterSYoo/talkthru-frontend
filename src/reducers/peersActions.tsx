@@ -1,6 +1,7 @@
 // Define/export constants for the different action types
 export const ADD_PEER_STREAM = 'ADD_PEER_STREAM' as const;
-export const REMOVE_PEER_STREAM = 'REMOVE_PEER_STREAM' as const;
+export const SET_PEER_VIDEO = 'SET_PEER_VIDEO' as const;
+export const SET_PEER_AUDIO = 'SET_PEER_AUDIO' as const;
 export const ADD_PEER_NAME = 'ADD_PEER_NAME' as const;
 export const ADD_ALL_PEERS = 'ADD_ALL_PEERS' as const;
 
@@ -17,14 +18,19 @@ export const addPeerStreamAction = (peerId: string, stream: MediaStream) => ({
 	payload: { peerId, stream },
 });
 
+export const setPeerVideoAction = (peerId: string, videoEnabled: boolean) => ({
+	type: SET_PEER_VIDEO,
+	payload: { peerId, videoEnabled },
+});
+
+export const setPeerAudioAction = (peerId: string, audioEnabled: boolean) => ({
+	type: SET_PEER_AUDIO,
+	payload: { peerId, audioEnabled },
+});
+
 export const addPeerNameAction = (peerId: string, userName: string) => ({
 	type: ADD_PEER_NAME,
 	payload: { peerId, userName },
-});
-
-export const removePeerStreamAction = (peerId: string) => ({
-	type: REMOVE_PEER_STREAM,
-	payload: { peerId },
 });
 
 export const addAllPeersAction = (peers: Record<string, IPeer>) => ({

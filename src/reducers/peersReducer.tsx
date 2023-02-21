@@ -1,4 +1,10 @@
-import { ADD_PEER_STREAM, ADD_PEER_NAME, REMOVE_PEER_STREAM, ADD_ALL_PEERS } from './peersActions';
+import {
+	ADD_PEER_STREAM,
+	SET_PEER_VIDEO,
+	SET_PEER_AUDIO,
+	ADD_PEER_NAME,
+	ADD_ALL_PEERS,
+} from './peersActions';
 
 // Define/export the type for the PeersState object
 export type PeersState = Record<
@@ -6,6 +12,8 @@ export type PeersState = Record<
 	{
 		peerId: string;
 		stream?: MediaStream;
+		videoEnabled: boolean;
+		audioEnabled: boolean;
 		userName?: string;
 	}
 >;
@@ -26,16 +34,24 @@ type PeersAction =
 			};
 	  }
 	| {
+			type: typeof SET_PEER_VIDEO;
+			payload: {
+				peerId: string;
+				videoEnabled: boolean;
+			};
+	  }
+	| {
+			type: typeof SET_PEER_AUDIO;
+			payload: {
+				peerId: string;
+				audioEnabled: boolean;
+			};
+	  }
+	| {
 			type: typeof ADD_PEER_NAME;
 			payload: {
 				peerId: string;
 				userName: string;
-			};
-	  }
-	| {
-			type: typeof REMOVE_PEER_STREAM;
-			payload: {
-				peerId: string;
 			};
 	  }
 	| {
@@ -57,6 +73,25 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 					stream: action.payload.stream,
 				},
 			};
+		// Toggles the peer's videoEnabled property
+		case SET_PEER_VIDEO:
+			// Use destructuring to isolate the peer object that needs modified
+			return {
+				...state,
+				[action.payload.peerId]: {
+					...state[action.payload.peerId],
+					videoEnabled: action.payload.videoEnabled,
+				},
+			};
+		// Manages the peer's audioEnabled property
+		case SET_PEER_AUDIO:
+			return {
+				...state,
+				[action.payload.peerId]: {
+					...state[action.payload.peerId],
+					stream: action.payload.audioEnabled,
+				},
+			};
 		// Adds/updates the userName for the given peerId in state
 		case ADD_PEER_NAME:
 			return {
@@ -66,11 +101,6 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 					userName: action.payload.userName,
 				},
 			};
-		// Removes peer object that correlates with peerId from state
-		case REMOVE_PEER_STREAM:
-			// Use destructuring to isolate the peer object that needs to be deleted from the other peers in state
-			const { [action.payload.peerId]: deleted, ...rest } = state;
-			return rest;
 		// Updates state with all nonlocal peers in the room
 		case ADD_ALL_PEERS:
 			return { ...state, ...action.payload.peers };
