@@ -47,8 +47,8 @@ export const Header = () => {
                   </button>
                 )}
                 {!isSignup && (
-                  <button className="flex h-[50px] w-[145px] items-center justify-center rounded-full bg-[#F1F192] text-[25px] font-medium">
-                    <Link to="/signup">Sign Up</Link>
+                  <button className="flex h-[50px] w-[145px] items-center justify-center rounded-full border-2 border-[#BFBFBF] bg-[#FFFFFF] text-[25px] font-medium">
+                    <Link to="/signup">Sign up</Link>
                   </button>
                 )}
               </>
