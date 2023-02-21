@@ -48,15 +48,15 @@ export const LoginPage = () => {
                 placeholder="Password"
                 className="w-full border border-gray-400 rounded-md h-[53px] focus:outline-none px-2"
               />
-              <p className="text-[15px] font-medium pt-1">
+              <Link to="/reset"><p className="text-[15px] font-medium pt-1">
                 Forgot your password?
-              </p>
+              </p></Link>
             </label>
           </div>
           {/* Sign Up & Google Button */}
           <div className="flex flex-col gap-[22px] mt-[60px]">
             {/* Sign Up Button */}
-            <button onClick={()=>logInWithEmailAndPassword} className="w-[395px] h-[50px] bg-[#F1F192] rounded-full flex justify-center items-center text-[25px] font-medium">
+            <button onClick={()=>logInWithEmailAndPassword(email, password)} className="w-[395px] h-[50px] bg-[#F1F192] rounded-full flex justify-center items-center text-[25px] font-medium">
               Login
             </button>
             <p className="text-[22px] font-bold mx-auto">OR</p>
