@@ -1,4 +1,44 @@
+import { useEffect, useState } from 'react';
+
 export const ChatStudyConnect = () => {
+  const [chat, setChat] = useState(
+    <>
+      Chat
+      <span className="text-[#E4E325]">.</span>
+    </>
+  );
+  const [study, setStudy] = useState(
+    <span className="opacity-0">
+      Study
+      <span className="text-[#E4E325]">.</span>
+    </span>
+  );
+  const [connect, setConnect] = useState(
+    <span className="opacity-0">
+      Connect
+      <span className="text-[#E4E325]">.</span>
+    </span>
+  );
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStudy(
+        <span className="opacity-100 transition duration-500">
+          Study
+          <span className="text-[#E4E325]">.</span>
+        </span>
+      );
+    }, 1000);
+    setTimeout(() => {
+      setConnect(
+        <span className="opacity-100 transition duration-500">
+          Connect
+          <span className="text-[#E4E325]">.</span>
+        </span>
+      );
+    }, 2000);
+  }, []);
+
   return (
     <>
       <div className="h-screen w-full">
@@ -9,8 +49,7 @@ export const ChatStudyConnect = () => {
             <div>
               {/* Heading */}
               <h1 className="max-w-[429px] text-[60px] font-bold leading-[70.38px]">
-                Chat
-                <span className="text-[#E4E325]">.</span>
+                {chat} {study} {connect}
               </h1>
               {/* Paragraph */}
               <p className="max-w-[509px] pt-[88px] text-[22px] font-medium leading-[25.81px]">
