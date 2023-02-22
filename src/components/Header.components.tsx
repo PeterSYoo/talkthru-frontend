@@ -6,6 +6,7 @@ export const Header = () => {
   const isSignup = location.pathname === '/signup';
   const isLogin = location.pathname === '/login';
   const isPreMeet = location.pathname === '/premeet';
+  const isSettings = location.pathname === '/settings';
 
   return (
     <>
@@ -23,7 +24,7 @@ export const Header = () => {
                 className="min-h-[88px] min-w-[203px]"
               />
             </Link>
-            {!isRoot && !isSignup && !isLogin && (
+            {!isRoot && !isSignup && !isLogin && !isSettings && (
               <div className="flex h-[40px] w-full max-w-[757px] items-center gap-[7px] rounded-full bg-white pl-[14px] pr-[18px]">
                 <img
                   src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676779361/TalkThru/Header/material-symbols_search-rounded_wvkjwa.png"
@@ -39,7 +40,7 @@ export const Header = () => {
           </div>
           <div className="flex items-center gap-[38px] pr-[58px]">
             {/* Conditionally Render Login, Signup, Avatar */}
-            {!isPreMeet && (
+            {!isPreMeet && !isSettings && (
               <>
                 {!isLogin && (
                   <button className="flex h-[50px] w-[145px] items-center justify-center rounded-full bg-[#F1F192] text-[25px] font-medium">
@@ -53,13 +54,43 @@ export const Header = () => {
                 )}
               </>
             )}
-            {!isRoot && !isSignup && !isLogin && (
+            {!isRoot && !isSignup && !isLogin && !isSettings && (
               <button>
                 <img
                   src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676778648/TalkThru/Header/avatar-h_fpx2qx.png"
                   alt="avatar"
                 />
               </button>
+            )}
+            {isSettings && (
+              <div className="flex min-w-[288px] items-center gap-[32px]">
+                <div>
+                  <img
+                    src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677048122/TalkThru/Header/add_alert_wrcup4.png"
+                    alt="alert"
+                  />
+                </div>
+                <div>
+                  <img
+                    src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677048122/TalkThru/Header/mark_chat_unread_inrlss.png"
+                    alt="unread chat"
+                  />
+                </div>
+                <div className="flex items-center gap-[15px]">
+                  <div>
+                    <img
+                      src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677048105/TalkThru/Header/toshi_adams_vtreql.png"
+                      alt="toshi"
+                    />
+                  </div>
+                  <div className="flex h-full flex-col justify-between text-white">
+                    <span className="text-[14px] font-medium">
+                      Welcome Back!
+                    </span>
+                    <span className="text-[16px] font-medium">Toshi Adams</span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

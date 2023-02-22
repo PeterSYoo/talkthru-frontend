@@ -10,6 +10,7 @@ import { PostMeetingPage } from './pages/PostMeeting.pages';
 import { PreMeetingPage } from './pages/PreMeeting.pages';
 import { ResetPage } from './pages/Reset.pages';
 import { Header } from './components/Header.components';
+import { SettingsPage } from './pages/Settings.pages';
 
 export const PageRoutes = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ export const PageRoutes = () => {
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/premeet" element={<PreMeetingPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route
           path="/room/:id"
           element={
