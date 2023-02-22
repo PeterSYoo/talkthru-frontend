@@ -1,4 +1,4 @@
-import { Header } from '../components/Header.components';
+import { Header } from '../components/header/Header.components';
 import { ChatStudyConnect } from '../components/landing-page/ChatStudyConnect.components';
 import { EnjoyYourSession } from '../components/landing-page/EnjoyYourSession.components';
 import { GetMatched } from '../components/landing-page/GetMatched.components';
@@ -8,7 +8,7 @@ import { SearchForASubject } from '../components/landing-page/SearchForASubject.
 export const LandingPage = () => {
   return (
     <>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col items-center justify-center">
         {/* Header */}
         <Header />
         {/* Chat Study Connect */}
