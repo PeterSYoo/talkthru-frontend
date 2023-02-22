@@ -9,7 +9,7 @@ import { SignUpPage } from './pages/SignUp.pages';
 import { PostMeetingPage } from './pages/PostMeeting.pages';
 import { PreMeetingPage } from './pages/PreMeeting.pages';
 import { ResetPage } from './pages/Reset.pages';
-import { Header } from './components/Header.components';
+import { Header } from './components/header/Header.components';
 import { SettingsPage } from './pages/Settings.pages';
 
 export const PageRoutes = () => {
