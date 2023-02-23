@@ -4,6 +4,7 @@ import {
 	SET_PEER_AUDIO,
 	ADD_PEER_NAME,
 	ADD_ALL_PEERS,
+	REMOVE_PEER,
 } from './peersActions';
 
 // Define/export the type for the PeersState object
@@ -59,6 +60,12 @@ type PeersAction =
 			payload: {
 				peers: Record<string, IPeer>;
 			};
+	  }
+	| {
+			type: typeof REMOVE_PEER;
+			payload: {
+				peerId: string;
+			};
 	  };
 
 // Define/export reducer that handles the PeersState object based on the action type that is dispatched
@@ -106,6 +113,10 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 		// Updates state with all nonlocal peers in the room
 		case ADD_ALL_PEERS:
 			return { ...state, ...action.payload.peers };
+		// Removes a peer from state
+		case REMOVE_PEER:
+			const { [action.payload.peerId]: removed, ...rest } = state;
+			return rest;
 		// Return the existing state object by default
 		default:
 			return { ...state };

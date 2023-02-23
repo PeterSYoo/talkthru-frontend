@@ -4,6 +4,7 @@ export const SET_PEER_VIDEO = 'SET_PEER_VIDEO' as const;
 export const SET_PEER_AUDIO = 'SET_PEER_AUDIO' as const;
 export const ADD_PEER_NAME = 'ADD_PEER_NAME' as const;
 export const ADD_ALL_PEERS = 'ADD_ALL_PEERS' as const;
+export const REMOVE_PEER = 'REMOVE_PEER' as const;
 
 interface IPeer {
 	userName: string;
@@ -36,4 +37,9 @@ export const addPeerNameAction = (peerId: string, userName: string) => ({
 export const addAllPeersAction = (peers: Record<string, IPeer>) => ({
 	type: ADD_ALL_PEERS,
 	payload: { peers },
+});
+
+export const removePeerAction = (peerId: string) => ({
+	type: REMOVE_PEER,
+	payload: { peerId },
 });
