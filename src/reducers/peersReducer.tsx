@@ -12,8 +12,8 @@ export type PeersState = Record<
 	{
 		peerId: string;
 		stream?: MediaStream;
-		videoEnabled: boolean;
-		audioEnabled: boolean;
+		videoEnabled?: boolean;
+		audioEnabled?: boolean;
 		userName?: string;
 	}
 >;
@@ -71,6 +71,8 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 				[action.payload.peerId]: {
 					...state[action.payload.peerId],
 					stream: action.payload.stream,
+					videoEnabled: action.payload.stream.getVideoTracks().length > 0,
+					audioEnabled: action.payload.stream.getAudioTracks().length > 0,
 				},
 			};
 		// Toggles the peer's videoEnabled property
@@ -89,7 +91,7 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 				...state,
 				[action.payload.peerId]: {
 					...state[action.payload.peerId],
-					stream: action.payload.audioEnabled,
+					audioEnabled: action.payload.audioEnabled,
 				},
 			};
 		// Adds/updates the userName for the given peerId in state
