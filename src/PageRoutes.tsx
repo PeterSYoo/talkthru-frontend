@@ -28,6 +28,7 @@ export const PageRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/reset" element={<ResetPage />} />
+        <Route path="/profile/" element={<ProfilePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/premeet" element={<PreMeetingPage />} />
