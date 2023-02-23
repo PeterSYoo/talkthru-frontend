@@ -11,6 +11,7 @@ export const Header = () => {
   const isLogin = location.pathname === '/login';
   const isPreMeet = location.pathname === '/premeet';
   const isSettings = location.pathname === '/settings';
+  const isProfile = location.pathname === '/profile';
 
   return (
     <>
@@ -48,7 +49,7 @@ export const Header = () => {
           </div>
           <div className="flex items-center gap-[38px] pr-[58px]">
             {/* Conditionally Render Login, Signup, Avatar */}
-            {!isPreMeet && !isSettings && (
+            {(isLogin || isRoot || isSignup) && (
               <>
                 {!isLogin && (
                   <button className="flex h-[50px] w-[145px] items-center justify-center rounded-full bg-[#F1F192] text-[25px] font-medium">

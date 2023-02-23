@@ -19,13 +19,18 @@ export const HamburgerModal = ({
           <span className="text-[15px] text-[#17153A]">Home</span>
         </button>
         {/* Profile */}
-        <button className="flex items-center gap-[12px]">
-          <img
-            src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677099675/TalkThru/Header/Hamburger%20Menu/person_wgjs6g.png"
-            alt="profile"
-          />
-          <span className="text-[15px] text-[#17153A]">Profile</span>
-        </button>
+        <Link to="/profile">
+          <button
+            onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
+            className="flex items-center gap-[12px]"
+          >
+            <img
+              src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677099675/TalkThru/Header/Hamburger%20Menu/person_wgjs6g.png"
+              alt="profile"
+            />
+            <span className="text-[15px] text-[#17153A]">Profile</span>
+          </button>
+        </Link>
         {/* Friends */}
         <button className="flex items-center gap-[12px]">
           <img
@@ -44,7 +49,10 @@ export const HamburgerModal = ({
         </button>
         {/* Settings */}
         <Link to="/settings">
-          <button className="flex items-center gap-[12px]">
+          <button
+            onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
+            className="flex items-center gap-[12px]"
+          >
             <img
               src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677099674/TalkThru/Header/Hamburger%20Menu/settings_zzyso6.png"
               alt="settings"
