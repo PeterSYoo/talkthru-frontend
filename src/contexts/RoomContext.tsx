@@ -5,8 +5,8 @@ import { webSocket } from '../webSocket';
 import {
 	addPeerStreamAction,
 	addPeerNameAction,
-	removePeerStreamAction,
 	addAllPeersAction,
+	removePeerAction,
 } from '../reducers/peersActions';
 import { peersReducer } from '../reducers/peersReducer';
 import { UserContext } from './UserContext';
@@ -56,7 +56,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	// Function to remove a peer from the application's state
 	const removePeer = (peerId: string) => {
 		// Dispatching an action to remove the peer from the state
-		dispatch(removePeerStreamAction(peerId));
+		dispatch(removePeerAction(peerId));
 
 		// Update connections state by removing the connection to peerId
 		setConnections((prevState) => prevState.filter((connection) => connection.peer !== peerId));
@@ -194,12 +194,6 @@ export const RoomProvider = ({ children }: { children: any }) => {
 			webSocket.off('user-joined');
 		};
 	}, [me, stream, userName]);
-
-	// Log the current state of peers to the console
-	// console.log({ me });
-	// console.log({ peers });
-	// console.log({ screenSharingId });
-	// console.log({ connections });
 
 	// Render the RoomContext provider with websocket, peer, and stream as values
 	return (
