@@ -135,6 +135,9 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 		// Removes a peer from state
 		case REMOVE_PEER:
 			const { [action.payload.peerId]: removed, ...rest } = state;
+			// Close the connection to the peer before removing peer from state
+			removed?.connection && removed.connection.close();
+
 			return rest;
 		// Return the existing state object by default
 		default:
