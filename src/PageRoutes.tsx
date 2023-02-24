@@ -7,14 +7,19 @@ import { HomePage } from './pages/Home.pages';
 import { RoomPage } from './pages/Room.pages';
 import { SignUpPage } from './pages/SignUp.pages';
 import { PostMeetingPage } from './pages/PostMeeting.pages';
-import { PreMeetingPage } from './pages/PreMeeting.pages';
+import { MatchMePage } from './pages/MatchMe.pages';
 import { ResetPage } from './pages/Reset.pages';
 import { Header } from './components/header/Header.components';
 import { SettingsPage } from './pages/Settings.pages';
+import { useProtectedRoute } from './hooks/useProtectedRoute';
 
 export const PageRoutes = () => {
   const location = useLocation();
   const isNotRoot = location.pathname !== '/';
+
+  const ProtectedMatchMePage = useProtectedRoute(MatchMePage);
+  const ProtectedProfilePage = useProtectedRoute(ProfilePage);
+  const ProtectedSettingsPage = useProtectedRoute(SettingsPage);
 
   return (
     <div
@@ -28,11 +33,11 @@ export const PageRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/reset" element={<ResetPage />} />
-        <Route path="/profile/" element={<ProfilePage />} />
+        <Route path="/profile/" element={<ProtectedProfilePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/premeet" element={<PreMeetingPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/match-me" element={<ProtectedMatchMePage />} />
+        <Route path="/settings" element={<ProtectedSettingsPage />} />
         <Route
           path="/room/:id"
           element={

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HamburgerModal } from './HamburgerModal.components';
 
 export const Header = () => {
