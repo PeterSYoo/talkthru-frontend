@@ -35,24 +35,20 @@ const FormSchema = z.object({
 });
 
 export const SignUpPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-
   const navigate = useNavigate();
 
   // Function to handle user sign-up
   const handleUserSignup = async (data: Inputs) => {
     try {
-      const result = await fetch(`${server_url}/users`, {
+      const response = await fetch(`${server_url}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-      const response = await result.json();
-      console.log(response);
+      const result = await response.json();
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -94,9 +90,7 @@ export const SignUpPage = () => {
                 <p className="text-[22px] font-medium">Name</p>
                 <input
                   type="text"
-                  value={name}
                   {...register('name')}
-                  onChange={(e) => setName(e.target.value)}
                   placeholder="Full Name"
                   className="h-[53px] w-full rounded-md border border-gray-400 px-2 focus:outline-none"
                 />
@@ -111,9 +105,7 @@ export const SignUpPage = () => {
                 <p className="text-[22px] font-medium">Email</p>
                 <input
                   type="email"
-                  value={email}
                   {...register('email')}
-                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email Address"
                   className="h-[53px] w-full rounded-md border border-gray-400 px-2 focus:outline-none"
                 />
@@ -128,9 +120,7 @@ export const SignUpPage = () => {
                 <p className="text-[22px] font-medium">Password</p>
                 <input
                   type="password"
-                  value={password}
                   {...register('password')}
-                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   className="h-[53px] w-full rounded-md border border-gray-400 px-2 focus:outline-none"
                 />
