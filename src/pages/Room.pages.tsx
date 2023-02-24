@@ -127,11 +127,6 @@ export const RoomPage = () => {
 						/>
 					</div>
 				</div>
-				{chat.isChatOpen && (
-					<div className='border-l-2 pb-28'>
-						<Chat />
-					</div>
-				)}
 
 				{/* Toolbar */}
 				<div className='absolute bottom-0 flex h-[88px] w-full items-center justify-between bg-white/[.8] px-[80px]'>
@@ -155,13 +150,8 @@ export const RoomPage = () => {
 
 					{/* Mid Container */}
 					<div className='flex h-full gap-[32px]'>
-						<div className='flex h-full flex-col items-center justify-end gap-[10px] pb-[10px]'>
-							<img
-								src='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681555/TalkThru/Meeting%20Room%20Page/chat_normal.png'
-								alt='chat-toggle-icon'
-							/>
-							<span className=''>Messages</span>
-						</div>
+						<ChatButton onClick={toggleChat} />
+						{chat.isChatOpen && <Chat />}
 						<div className='flex h-full flex-col items-center justify-end gap-[10px] pb-[10px]'>
 							<img
 								src='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681415/TalkThru/Meeting%20Room%20Page/share_screen.png'
@@ -176,8 +166,8 @@ export const RoomPage = () => {
 							/>
 							<span className=''>Notes</span>
 						</div>
-						{/* <ChatButton onClick={toggleChat} />
-						<ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId} /> */}
+
+						{/* <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId} /> */}
 					</div>
 
 					{/* Right Container */}
