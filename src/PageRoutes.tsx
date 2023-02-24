@@ -13,13 +13,13 @@ import { Header } from './components/header/Header.components';
 import { SettingsPage } from './pages/Settings.pages';
 import { useProtectedRoute } from './hooks/useProtectedRoute';
 
-const ProtectedMatchMePage = useProtectedRoute(MatchMePage);
-const ProtectedProfilePage = useProtectedRoute(ProfilePage);
-const ProtectedSettingsPage = useProtectedRoute(SettingsPage);
-
 export const PageRoutes = () => {
   const location = useLocation();
   const isNotRoot = location.pathname !== '/';
+
+  const ProtectedMatchMePage = useProtectedRoute(MatchMePage);
+  const ProtectedProfilePage = useProtectedRoute(ProfilePage);
+  const ProtectedSettingsPage = useProtectedRoute(SettingsPage);
 
   return (
     <div
