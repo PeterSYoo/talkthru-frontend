@@ -40,7 +40,7 @@ export const Chat: React.FC = ({}) => {
 					</div>
 				</div>
 				{/* Messages Container */}
-				<div className='flex flex-col justify-between'>
+				<div className='flex h-[352px] w-full flex-col justify-between'>
 					<div>
 						{chat.messages.map((message: IMessage) => (
 							<ChatBubble message={message} />
