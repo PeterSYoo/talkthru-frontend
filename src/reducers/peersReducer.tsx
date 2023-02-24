@@ -1,4 +1,6 @@
+import { MediaConnection } from 'peerjs';
 import {
+	ADD_PEER_CONNECTION,
 	ADD_PEER_STREAM,
 	SET_PEER_VIDEO,
 	SET_PEER_AUDIO,
@@ -12,6 +14,7 @@ export type PeersState = Record<
 	string,
 	{
 		peerId: string;
+		connection?: MediaConnection;
 		stream?: MediaStream;
 		videoEnabled?: boolean;
 		audioEnabled?: boolean;
@@ -27,6 +30,13 @@ interface IPeer {
 // Define the acceptable action object types for the PeersAction object
 // These types correlate with their respective creator functions in peersActions
 type PeersAction =
+	| {
+			type: typeof ADD_PEER_CONNECTION;
+			payload: {
+				peerId: string;
+				connection: MediaConnection;
+			};
+	  }
 	| {
 			type: typeof ADD_PEER_STREAM;
 			payload: {
@@ -71,6 +81,15 @@ type PeersAction =
 // Define/export reducer that handles the PeersState object based on the action type that is dispatched
 export const peersReducer = (state: PeersState, action: PeersAction) => {
 	switch (action.type) {
+		// Adds/updates the stream for the given peerId in state
+		case ADD_PEER_CONNECTION:
+			return {
+				...state,
+				[action.payload.peerId]: {
+					...state[action.payload.peerId],
+					connection: action.payload.connection,
+				},
+			};
 		// Adds/updates the stream for the given peerId in state
 		case ADD_PEER_STREAM:
 			return {

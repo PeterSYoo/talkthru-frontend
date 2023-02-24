@@ -1,4 +1,7 @@
+import { MediaConnection } from 'peerjs';
+
 // Define/export constants for the different action types
+export const ADD_PEER_CONNECTION = 'ADD_PEER_CONNECTION' as const;
 export const ADD_PEER_STREAM = 'ADD_PEER_STREAM' as const;
 export const SET_PEER_VIDEO = 'SET_PEER_VIDEO' as const;
 export const SET_PEER_AUDIO = 'SET_PEER_AUDIO' as const;
@@ -14,6 +17,11 @@ interface IPeer {
 // Define/export creator functions for each action type
 // These functions are used with the useReducer hook to update the state of a component
 // 'type' and 'payload' describes the expected arguments when the action is dispatched
+export const addPeerConnectionAction = (peerId: string, connection: MediaConnection) => ({
+	type: ADD_PEER_CONNECTION,
+	payload: { peerId, connection },
+});
+
 export const addPeerStreamAction = (peerId: string, stream: MediaStream) => ({
 	type: ADD_PEER_STREAM,
 	payload: { peerId, stream },
