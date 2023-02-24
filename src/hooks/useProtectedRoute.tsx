@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Set the URL of the backend server
+const server_url = import.meta.env.VITE_BACKEND_URL as string;
+
 export const useProtectedRoute = (Component: any) => {
   const ProtectedRoute = (props: any) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,7 +16,7 @@ export const useProtectedRoute = (Component: any) => {
           const token = localStorage.getItem('token');
           if (token) {
             // Verify the token on the server side
-            const response = await fetch('/api/verify', {
+            const response = await fetch(`${server_url}/verify`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -34,7 +37,7 @@ export const useProtectedRoute = (Component: any) => {
         }
       };
       authenticate();
-    }, [navigate]);
+    }, [navigate, isAuthenticated]);
 
     if (!isAuthenticated) {
       // Redirect to the login page if not authenticated
@@ -42,11 +45,7 @@ export const useProtectedRoute = (Component: any) => {
       return null;
     }
 
-    return (
-      <>
-        <Component {...props} />
-      </>
-    );
+    return <Component {...props} />;
   };
 
   return ProtectedRoute;
