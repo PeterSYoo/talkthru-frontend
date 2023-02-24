@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const HamburgerModal = ({
   isHamburgerOpen,
@@ -7,6 +7,13 @@ export const HamburgerModal = ({
   isHamburgerOpen: boolean;
   setIsHamburgerOpen: (modal: boolean) => void;
 }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove the token from local storage
+    navigate('/login'); // Redirect to the login page
+  };
+
   return (
     <div className="absolute top-[75px] z-10 flex w-[184px] flex-col gap-[64px] bg-white px-[16px] py-[8px]">
       <div className="flex flex-col gap-[32px]">
@@ -89,7 +96,10 @@ export const HamburgerModal = ({
       </div>
       <div>
         {/* Logout */}
-        <button className="flex items-center gap-[12px]">
+        <button
+          onClick={() => handleLogout()}
+          className="flex items-center gap-[12px]"
+        >
           <img
             src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677099692/TalkThru/Header/Hamburger%20Menu/logout_1_skbvb3.png"
             alt="help"

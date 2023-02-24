@@ -3,7 +3,7 @@ import { ChooseExpertise } from '../components/pre-meeting/ChooseExpertise.compo
 import { ChooseSubject } from '../components/pre-meeting/ChooseSubject.components';
 import { LookingForUser } from '../components/pre-meeting/LookingForUser.components';
 
-export const PreMeetingPage = () => {
+export const MatchMePage = () => {
   const [subject, setSubject] = useState<string>('');
   const [expertise, setExpertise] = useState<string>('');
 
