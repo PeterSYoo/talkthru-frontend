@@ -11,6 +11,7 @@ import { MatchMePage } from './pages/MatchMe.pages';
 import { ResetPage } from './pages/Reset.pages';
 import { Header } from './components/header/Header.components';
 import { SettingsPage } from './pages/Settings.pages';
+import { AboutPage } from './pages/About.pages';
 import { useProtectedRoute } from './hooks/useProtectedRoute';
 
 export const PageRoutes = () => {
@@ -30,6 +31,7 @@ export const PageRoutes = () => {
       {isNotRoot && <Header />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/reset" element={<ResetPage />} />
