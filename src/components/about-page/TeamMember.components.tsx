@@ -5,10 +5,11 @@ type TeamMemberProps = {
     name: string,
     role: string,
     quote: string,
-    pic: string
+    pic: string,
+    linkedIn: string
 };
 
-export const TeamMember: React.FC<TeamMemberProps> = ({ name, role, quote, pic }) => {
+export const TeamMember: React.FC<TeamMemberProps> = ({ name, role, quote, pic, linkedIn }) => {
 
     return (
         <>
@@ -20,8 +21,8 @@ export const TeamMember: React.FC<TeamMemberProps> = ({ name, role, quote, pic }
                     <p className="text-[15px] leading-[22.5px] text-center">{quote}</p>
                 </div>
                 <div className="h-[24px] w-[61px] flex flex-row items-start p-0 gap-[13px]">
-                    <Link to="#"><img className="h-[24px] w-[24px]" src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677221268/TalkThru/About%20Page/Vector_jtszps.png" alt="LinkedIn Icon" /></Link>
-                    <Link to="#"><img className= "h-[24px] w-[24px]" src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677221340/TalkThru/About%20Page/share_ctqvha.png" alt="Share Icon" /></Link>
+                    <Link to={linkedIn} target="_blank"><img className="h-[24px] w-[24px]" src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677221268/TalkThru/About%20Page/Vector_jtszps.png" alt="LinkedIn Icon" /></Link>
+                    <Link to="#" target="_blank"><img className= "h-[24px] w-[24px]" src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677221340/TalkThru/About%20Page/share_ctqvha.png" alt="Share Icon" /></Link>
                 </div>
             </div>
         </>
