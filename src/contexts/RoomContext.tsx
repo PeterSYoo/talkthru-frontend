@@ -1,14 +1,15 @@
 import { createContext, useContext, useEffect, useState, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Peer from 'peerjs';
+import Peer, { MediaConnection } from 'peerjs';
 import { webSocket } from '../webSocket';
 import {
+	addPeerConnectionAction,
 	addPeerStreamAction,
 	addPeerNameAction,
-	removePeerStreamAction,
 	addAllPeersAction,
+	removePeerAction,
 } from '../reducers/peersActions';
-import { peersReducer } from '../reducers/peersReducer';
+import { peersReducer, PeersState } from '../reducers/peersReducer';
 import { UserContext } from './UserContext';
 
 interface IPeer {
@@ -36,30 +37,77 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [peers, dispatch] = useReducer(peersReducer, {});
 	// State to keep track of the room ID for the local peer
 	const [roomId, setRoomId] = useState<string>('');
-	// State to keep track of the connections between all peers
-	// connections[i].peer correlates to the keys in peers state
-	const [connections, setConnections] = useState<any[]>([]);
 
 	// Destructure context for the props we need
-	const { userName, userId } = useContext(UserContext);
+	const { name: userName, id: userId } = useContext(UserContext);
 
 	// Function to navigate to a specific room page
 	const enterRoom = ({ roomId }: { roomId: string }) => {
 		navigate(`/room/${roomId}`);
 	};
 
+	// Function to send outgoing call
+	const sendConnection = (peer: IPeer) => {
+		if (!me || !stream) return;
+
+		// Make an outbound call to the new peer using their peerId and the local media stream
+		// Passing data that other peers need to know as 'metadata' property
+		const call = me.call(peer.peerId, stream, {
+			metadata: { userName },
+		});
+
+		// Register an event listener for the peer stream
+		call.on('stream', (peerStream) => {
+			// Add the new peer's stream to peers state
+			dispatch(addPeerStreamAction(peer.peerId, peerStream));
+		});
+
+		// Add the new peer's name to peers state
+		dispatch(addPeerNameAction(peer.peerId, peer.userName));
+
+		// Add the new call/connection object to peers state
+		dispatch(addPeerConnectionAction(peer.peerId, call));
+	};
+
+	// Function to answer incoming call
+	const receiveConnection = (call: MediaConnection) => {
+		// Update peers state with properties from metadata
+		const { userName } = call.metadata;
+		dispatch(addPeerNameAction(call.peer, userName));
+
+		// Add the incoming call/connection to peers state
+		dispatch(addPeerConnectionAction(call.peer, call));
+
+		// Respond to the incoming call with the local stream
+		call.answer(stream);
+
+		// Register an event listener for the peer to send their stream
+		call.on('stream', (peerStream) => {
+			// Add the incoming peer's stream to peers state
+			dispatch(addPeerStreamAction(call.peer, peerStream));
+		});
+	};
+
 	// Function to update 'peers' state with the list of participants in a room
 	const getUsers = ({ participants }: { participants: Record<string, IPeer> }) => {
-		dispatch(addAllPeersAction(participants));
+		if (!me || !stream) return;
+
+		// Establish a new connection with existing peers in the room
+		Object.values(participants).forEach((peer: IPeer) => {
+			// Make sure a connection is not already established
+			if (peer.peerId in peers) return;
+
+			sendConnection(peer);
+		});
+
+		// Listen for incoming calls
+		me.on('call', receiveConnection);
 	};
 
 	// Function to remove a peer from the application's state
 	const removePeer = (peerId: string) => {
 		// Dispatching an action to remove the peer from the state
-		dispatch(removePeerStreamAction(peerId));
-
-		// Update connections state by removing the connection to peerId
-		setConnections((prevState) => prevState.filter((connection) => connection.peer !== peerId));
+		dispatch(removePeerAction(peerId));
 	};
 
 	// Function to update the stream for local and remote peers
@@ -71,9 +119,12 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		// Store the video track of newStream to update all remote peer connections
 		const videoTrack = newStream.getVideoTracks()[0];
 
-		Object.values(connections).forEach((connection) => {
+		Object.values(peers as PeersState).forEach((peer) => {
+			// Make sure peer is not local peer and that local peer has a connection with peer
+			if (peer.peerId === userId || !peer.connection) return;
+
 			// Access the RTCPeerConnection between local peer and remote peer
-			connection.peerConnection
+			peer.connection.peerConnection
 				// Get the RTCRtpSender that handles video streaming -> senders[0: audio, 1: video]
 				.getSenders()[1]
 				// Start sending newStream's videoTrack
@@ -148,58 +199,22 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		}
 	}, [screenSharingId, roomId]);
 
-	// useEffect to handle incoming and outgoing calls
+	// useEffect to handle new peers joining the room
 	useEffect(() => {
 		// Exit if me or stream is not defined
 		if (!me) return;
 		if (!stream) return;
 
 		// Register an event listener for a new peer joining the room
-		webSocket.on('user-joined', ({ peerId, userName: name }) => {
-			// Make an outbound call to the new peer using their peerId and the local media stream
-			// Passing data that other peers need to know as 'metadata' property
-			const call = me.call(peerId, stream, {
-				metadata: { userName },
-			});
-
-			// Register an event listener for the peer stream
-			call.on('stream', (peerStream) => {
-				// Dispatch an action to add/update the new peer stream to peers state
-				dispatch(addPeerStreamAction(peerId, peerStream));
-			});
-
-			// Dispatch an action to add the new peer name to the peers state
-			dispatch(addPeerNameAction(peerId, name));
-
-			// Store call/connection object in state
-			setConnections((prevState) => [...prevState, call]);
-		});
+		webSocket.on('user-joined', sendConnection);
 
 		// Register an event listener for incoming calls
-		me.on('call', (call) => {
-			// Update peer state with user's Id
-			const { userName } = call.metadata;
-			dispatch(addPeerNameAction(call.peer, userName));
-
-			// Answer the incoming call with the local media stream
-			call.answer(stream);
-			// Register an event listener for the peer stream
-			call.on('stream', (peerStream) => {
-				// Dispatch an action to add the incoming peer stream to the peers state
-				dispatch(addPeerStreamAction(call.peer, peerStream));
-			});
-		});
+		me.on('call', receiveConnection);
 
 		return () => {
 			webSocket.off('user-joined');
 		};
 	}, [me, stream, userName]);
-
-	// Log the current state of peers to the console
-	// console.log({ me });
-	// console.log({ peers });
-	// console.log({ screenSharingId });
-	// console.log({ connections });
 
 	// Render the RoomContext provider with websocket, peer, and stream as values
 	return (
@@ -209,6 +224,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				screenStream,
 				screenSharingId,
 				peers,
+				roomId,
 				shareScreen,
 				setRoomId,
 			}}>

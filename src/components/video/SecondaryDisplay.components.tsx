@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const PrimaryDisplay: React.FC<{ stream?: MediaStream }> = ({ stream }) => {
+export const SecondaryDisplay: React.FC<{ stream?: MediaStream }> = ({ stream }) => {
 	// Use `useRef` to create a reference to a `HTMLVideoElement`.
 	const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -15,7 +15,7 @@ export const PrimaryDisplay: React.FC<{ stream?: MediaStream }> = ({ stream }) =
 	// and set its `ref` to the `videoRef` created earlier.
 	return (
 		<>
-			<video ref={videoRef} autoPlay muted className='h-full w-full object-cover' />
+			<video ref={videoRef} autoPlay muted className='h-full w-full rounded-[10px] object-cover' />
 		</>
 	);
 };
