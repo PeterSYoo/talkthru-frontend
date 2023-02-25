@@ -41,7 +41,7 @@ export const Chat: React.FC = ({}) => {
 				</div>
 				{/* Messages Container */}
 				<div className='flex h-[352px] w-full flex-col justify-between'>
-					<div>
+					<div className='max-h-full overflow-y-auto'>
 						{chat.messages.map((message: IMessage) => (
 							<ChatBubble message={message} />
 						))}
