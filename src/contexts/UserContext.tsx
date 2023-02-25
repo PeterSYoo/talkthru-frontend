@@ -1,5 +1,4 @@
-import { createContext, useEffect, useState, useReducer } from 'react';
-import { v4 as uuidV4 } from 'uuid';
+import { createContext, useEffect, useState } from 'react';
 
 // Set the URL of the backend server
 const server_url = import.meta.env.VITE_BACKEND_URL as string;
@@ -39,7 +38,7 @@ export const UserProvider = ({ children }: { children: any }) => {
 	}, []);
 
 	return (
-		<UserContext.Provider value={{ id, name, subject, expertise, matching }}>
+		<UserContext.Provider value={{ userId: id, userName: name, subject, expertise, matching }}>
 			{children}
 		</UserContext.Provider>
 	);
