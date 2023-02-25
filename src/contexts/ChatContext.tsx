@@ -2,13 +2,7 @@ import { createContext, useEffect, useReducer } from 'react';
 import { webSocket } from '../webSocket';
 import { addMessageAction, addHistoryAction, toggleChatAction } from '../reducers/chatActions';
 import { chatReducer } from '../reducers/chatReducer';
-
-// Type definition for a message
-interface IMessage {
-	content: string;
-	author?: string;
-	timestamp: number;
-}
+import { IMessage } from '../types/Chat';
 
 // Create a context for sharing data across components
 export const ChatContext = createContext<null | any>(null);
@@ -22,12 +16,12 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	});
 
 	// Function to emit chat message to websocket server when onSubmit triggers in ChatInput
-	const sendMessage = (message: string, roomId: string, author: string) => {
+	const sendMessage = (message: string, roomId: string, authorId: string) => {
 		// Construct new IMessage object
 		const messageData: IMessage = {
 			content: message,
 			timestamp: new Date().getTime(),
-			author,
+			authorId,
 		};
 
 		// Update chat state
