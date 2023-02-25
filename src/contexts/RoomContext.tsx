@@ -224,6 +224,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				screenStream,
 				screenSharingId,
 				peers,
+				roomId,
 				shareScreen,
 				setRoomId,
 			}}>
