@@ -34,7 +34,7 @@ export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 				<div className='flex flex-col'>
 					{/* Message Container */}
 					<div
-						className={`inline-block rounded p-[10px] text-[14px] ${
+						className={`shadow-[0px 1px 6px 0px rgba(0, 0, 0, 0.25)] inline-block rounded p-[10px] text-[14px] ${
 							isSelf ? 'bg-[#EFD38A]' : 'bg-[#E4E325]'
 						}`}>
 						{message.content}
@@ -44,7 +44,7 @@ export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 						</div>
 					</div>
 					{/* Author Container */}
-					<div className={`text-xs ${isSelf ? 'text-right' : 'text-left'}`}>
+					<div className={`text-xs  ${isSelf ? 'text-right' : 'text-left'}`}>
 						{isSelf ? 'You' : authorName}
 					</div>
 				</div>
