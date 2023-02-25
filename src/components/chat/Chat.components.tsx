@@ -2,13 +2,7 @@ import { useContext } from "react";
 import { ChatContext } from '../../contexts/ChatContext';
 import { ChatBubble } from "./ChatBubble.components";
 import { ChatInput } from "./ChatInput.components";
-
-// Type definition for a message
-interface IMessage {
-  content: string;
-  author?: string;
-  timestamp: number;
-}
+import { IMessage } from '../../types/Chat';
 
 export const Chat: React.FC = ({}) => {
 	// Destructure context for the props we need

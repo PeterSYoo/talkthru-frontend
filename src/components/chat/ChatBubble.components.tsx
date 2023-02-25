@@ -1,27 +1,20 @@
 import { useContext } from "react";
 import { UserContext } from '../../contexts/UserContext';
 import { RoomContext } from '../../contexts/RoomContext';
-
-// Type definition for a message
-interface IMessage {
-	content: string;
-	author?: string;
-	timestamp: number;
-}
+import { IMessage } from '../../types/Chat';
 
 export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 	// Destructure context for the props we need
 	const { userId } = useContext(UserContext);
 	const { peers } = useContext(RoomContext);
 
-	// Use message prop to define elements of the chat bubble
-	const author = message.author && peers[message.author];
-	const authorName = author?.userName || 'anonymous';
-	const time = new Date(message.timestamp).toLocaleTimeString();
-
 	// Boolean to dynamically determine styling for the chat bubble
-	// Uses optional chaining to make sure 'me' exists before reading it's properties to prevent a TypeError
-	const isSelf = message.author === userId;
+	const isSelf = message.authorId === userId;
+
+	// Use message prop to define elements of the chat bubble
+	const author = message.authorId && peers[message.authorId];
+	const authorName = isSelf ? 'You' : author?.userName || 'Anonymous';
+	const time = new Date(message.timestamp).toLocaleTimeString();
 
 	return (
 		<>
@@ -44,9 +37,7 @@ export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 						</div>
 					</div>
 					{/* Author Container */}
-					<div className={`text-xs  ${isSelf ? 'text-right' : 'text-left'}`}>
-						{isSelf ? 'You' : authorName}
-					</div>
+					<div className={`text-xs  ${isSelf ? 'text-right' : 'text-left'}`}>{authorName}</div>
 				</div>
 			</div>
 		</>
