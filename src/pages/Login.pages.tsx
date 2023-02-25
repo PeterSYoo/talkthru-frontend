@@ -66,7 +66,6 @@ export const LoginPage = () => {
     handleLoginSubmit(data);
     // Reset the form and navigate to the login page
     reset;
-    navigate('/login');
   };
 
   return (
