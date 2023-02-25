@@ -1,9 +1,4 @@
-// Type definition for a message
-interface IMessage {
-	content: string;
-	author?: string;
-	timestamp: number;
-}
+import { IMessage } from '../types/Chat';
 
 // Define/export constants for the different action types
 export const ADD_MESSAGE = 'ADD_MESSAGE' as const;

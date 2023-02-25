@@ -1,11 +1,5 @@
 import { ADD_MESSAGE, ADD_HISTORY, TOGGLE_CHAT } from './chatActions';
-
-// Type definition for a message
-interface IMessage {
-	content: string;
-	author?: string;
-	timestamp: number;
-}
+import { IMessage } from '../types/Chat';
 
 // Define/export the type for the ChatState object
 export type ChatState = {
