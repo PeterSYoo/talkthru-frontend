@@ -8,7 +8,7 @@ export const ChatInput: React.FC = () => {
 	const [message, setMessage] = useState<string>('');
 
 	// Destructure context for the props we need
-	const { userId } = useContext(UserContext);
+	const { id: userId } = useContext(UserContext);
 	const { roomId } = useContext(RoomContext);
 	const { sendMessage } = useContext(ChatContext);
 

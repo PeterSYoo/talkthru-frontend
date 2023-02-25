@@ -39,7 +39,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [roomId, setRoomId] = useState<string>('');
 
 	// Destructure context for the props we need
-	const { userName, userId } = useContext(UserContext);
+	const { name: userName, id: userId } = useContext(UserContext);
 
 	// Function to navigate to a specific room page
 	const enterRoom = ({ roomId }: { roomId: string }) => {
