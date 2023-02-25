@@ -24,16 +24,31 @@ export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 	const isSelf = message.author === userId;
 
 	return (
-		<div className={`m-2 flex ${isSelf ? 'pl-10 justify-end' : 'pr-10 justify-start'}`}>
-			<div className='flex flex-col'>
-				<div className={`inline-block py-2 px-4 rounded ${isSelf ? 'bg-gray-200' : 'bg-gray-400'}`}>
-					{message.content}
-					<div className={`text-xs opacity-50 ${isSelf ? 'text-right' : 'text-left'}`}>{time}</div>
-				</div>
-				<div className={`text-xs ${isSelf ? 'text-right' : 'text-left'}`}>
-					{isSelf ? 'You' : authorName}
+		<>
+			{/* Row Container */}
+			<div
+				className={`my-2 flex font-archivo ${
+					isSelf ? 'mr-[21px] justify-end pl-9' : 'ml-[19px] justify-start pr-9'
+				}`}>
+				{/* Chat Bubble Container */}
+				<div className='flex flex-col'>
+					{/* Message Container */}
+					<div
+						className={`inline-block rounded p-[10px] text-[14px] ${
+							isSelf ? 'bg-[#EFD38A]' : 'bg-[#E4E325]'
+						}`}>
+						{message.content}
+						{/* Timer Container */}
+						<div className={`text-xs opacity-50 ${isSelf ? 'text-right' : 'text-left'}`}>
+							{time}
+						</div>
+					</div>
+					{/* Author Container */}
+					<div className={`text-xs ${isSelf ? 'text-right' : 'text-left'}`}>
+						{isSelf ? 'You' : authorName}
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
