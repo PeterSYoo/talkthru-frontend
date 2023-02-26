@@ -28,7 +28,7 @@ export const RoomPage = () => {
 	const { userName, userId } = useContext(UserContext);
 	const { stream, screenStream, screenSharingId, peers, shareScreen, setRoomId } =
 		useContext(RoomContext);
-	const { chat, toggleChat } = useContext(ChatContext);
+	const { chat, toggleMessages, toggleNotes } = useContext(ChatContext);
 
 	// Emits 'join-room' event after 'stream' object is available
 	useEffect(() => {
@@ -132,41 +132,42 @@ export const RoomPage = () => {
 				<div className='absolute bottom-0 flex h-[88px] w-full items-center justify-between bg-white/[.8] px-[80px]'>
 					{/* Left Container */}
 					<div className='flex h-full gap-[32px]'>
-						<div className='flex h-full flex-col items-center justify-end gap-[10px] pb-[10px]'>
-							<img
-								src='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676680662/TalkThru/Meeting%20Room%20Page/camera_on_no_fill.png'
-								alt='video-toggle-icon'
-							/>
-							<span className=''>Camera</span>
-						</div>
-						<div className='flex h-full flex-col items-center justify-end gap-[10px] pb-[10px]'>
-							<img
-								src='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676680830/TalkThru/Meeting%20Room%20Page/audio_on_no_fill.png'
-								alt='audio-toggle-icon'
-							/>
-							<span className=''>Audio</span>
-						</div>
+						<ChatButton
+							onClick={() => {}}
+							title='Camera'
+							imageUrl='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676680662/TalkThru/Meeting%20Room%20Page/camera_on_no_fill.png'
+							altText='video-toggle-icon'
+						/>
+						<ChatButton
+							onClick={() => {}}
+							title='Mute'
+							imageUrl='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676680830/TalkThru/Meeting%20Room%20Page/audio_on_no_fill.png'
+							altText='audio-toggle-icon'
+						/>
 					</div>
 
 					{/* Mid Container */}
 					<div className='flex h-full gap-[32px]'>
-						<ChatButton onClick={toggleChat} />
-						{chat.isChatOpen && <Chat />}
-						<div className='flex h-full flex-col items-center justify-end gap-[10px] pb-[10px]'>
-							<img
-								src='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681415/TalkThru/Meeting%20Room%20Page/share_screen.png'
-								alt='share-screen-toggle-icon'
-							/>
-							<span className=''>Share Screen</span>
-						</div>
-						<div className='flex h-full flex-col items-center justify-end gap-[10px] pb-[10px]'>
-							<img
-								src='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681418/TalkThru/Meeting%20Room%20Page/notes.png'
-								alt='notes-toggle-icon'
-							/>
-							<span className=''>Notes</span>
-						</div>
-
+						<ChatButton
+							onClick={toggleMessages}
+							title='Messages'
+							imageUrl='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681555/TalkThru/Meeting%20Room%20Page/chat_normal.png'
+							altText='chat-messages-toggle-icon'
+						/>
+						<ChatButton
+							onClick={() => {}}
+							title='Share Screen'
+							imageUrl='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681415/TalkThru/Meeting%20Room%20Page/share_screen.png'
+							altText='share-screen-toggle-icon'
+						/>
+						<ChatButton
+							onClick={toggleNotes}
+							title='Notes'
+							imageUrl='https://res.cloudinary.com/dryh1nvhk/image/upload/v1676681418/TalkThru/Meeting%20Room%20Page/notes.png'
+							altText='chat-notes-toggle-icon'
+						/>
+						{/* Dynamically Render Chat */}
+						{(chat.isMessagesOpen || chat.isNotesOpen) && <Chat />}
 						{/* <ShareScreenButton onClick={shareScreen} screenSharingId={screenSharingId} /> */}
 					</div>
 
