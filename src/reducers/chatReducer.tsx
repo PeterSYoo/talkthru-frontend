@@ -1,4 +1,4 @@
-import { ADD_MESSAGE, ADD_HISTORY, TOGGLE_MESSAGES, TOGGLE_NOTES } from './chatActions';
+import { ADD_MESSAGE, ADD_HISTORY, TOGGLE_MESSAGES, TOGGLE_NOTES, ADD_NOTE } from './chatActions';
 import { IMessage, INote } from '../types/Chat';
 
 // Define/export the type for the ChatState object
@@ -17,8 +17,12 @@ type ChatAction =
 			payload: { message: IMessage };
 	  }
 	| {
+			type: typeof ADD_NOTE;
+			payload: { note: INote };
+	  }
+	| {
 			type: typeof ADD_HISTORY;
-			payload: { history: IMessage[] };
+			payload: { messagesHistory: IMessage[]; notesHistory: INote[] };
 	  }
 	| {
 			type: typeof TOGGLE_MESSAGES;
@@ -42,7 +46,8 @@ export const chatReducer = (state: ChatState, action: ChatAction) => {
 		case ADD_HISTORY:
 			return {
 				...state,
-				messages: action.payload.history,
+				messages: action.payload.messagesHistory,
+				notes: action.payload.notesHistory,
 			};
 		// Opens/closes chat messages
 		case TOGGLE_MESSAGES:

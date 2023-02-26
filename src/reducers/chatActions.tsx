@@ -1,7 +1,8 @@
-import { IMessage } from '../types/Chat';
+import { IMessage, INote } from '../types/Chat';
 
 // Define/export constants for the different action types
 export const ADD_MESSAGE = 'ADD_MESSAGE' as const;
+export const ADD_NOTE = 'ADD_NOTE' as const;
 export const ADD_HISTORY = 'ADD_HISTORY' as const;
 export const TOGGLE_MESSAGES = 'TOGGLE_MESSAGES' as const;
 export const TOGGLE_NOTES = 'TOGGLE_NOTES' as const;
@@ -14,9 +15,14 @@ export const addMessageAction = (message: IMessage) => ({
 	payload: { message },
 });
 
-export const addHistoryAction = (history: IMessage[]) => ({
+export const addNoteAction = (note: INote) => ({
+	type: ADD_NOTE,
+	payload: { note },
+});
+
+export const addHistoryAction = (messagesHistory: IMessage[], notesHistory: INote[]) => ({
 	type: ADD_HISTORY,
-	payload: { history },
+	payload: { messagesHistory, notesHistory },
 });
 
 export const toggleMessagesAction = (isOpen: boolean) => ({
