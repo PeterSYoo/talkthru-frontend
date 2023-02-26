@@ -1,6 +1,11 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { webSocket } from '../webSocket';
-import { addMessageAction, addHistoryAction, toggleChatAction } from '../reducers/chatActions';
+import {
+	addMessageAction,
+	addHistoryAction,
+	toggleMessagesAction,
+	toggleNotesAction,
+} from '../reducers/chatActions';
 import { chatReducer } from '../reducers/chatReducer';
 import { IMessage } from '../types/Chat';
 
@@ -12,7 +17,9 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	// State to keep track of chat messages for a room
 	const [chat, chatDispatch] = useReducer(chatReducer, {
 		messages: [],
-		isChatOpen: false,
+		notes: [],
+		isMessagesOpen: false,
+		isNotesOpen: false,
 	});
 
 	// Function to emit chat message to websocket server when onSubmit triggers in ChatInput
@@ -41,9 +48,14 @@ export const ChatProvider = ({ children }: { children: any }) => {
 		chatDispatch(addHistoryAction(messages));
 	};
 
-	// Function to update chat state to the opposite of what it currently is
-	const toggleChat = () => {
-		chatDispatch(toggleChatAction(!chat.isChatOpen));
+	// Function to open/close chat messages onClick
+	const toggleMessages = () => {
+		chatDispatch(toggleMessagesAction(!chat.isMessagesOpen));
+	};
+
+	// Function to open/close chat notes onClick
+	const toggleNotes = () => {
+		chatDispatch(toggleNotesAction(!chat.isNotesOpen));
 	};
 
 	// Handles event listeners
@@ -59,7 +71,7 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	}, []);
 
 	return (
-		<ChatContext.Provider value={{ chat, sendMessage, toggleChat }}>
+		<ChatContext.Provider value={{ chat, sendMessage, toggleMessages, toggleNotes }}>
 			{children}
 		</ChatContext.Provider>
 	);

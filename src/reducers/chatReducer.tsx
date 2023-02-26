@@ -1,10 +1,12 @@
-import { ADD_MESSAGE, ADD_HISTORY, TOGGLE_CHAT } from './chatActions';
-import { IMessage } from '../types/Chat';
+import { ADD_MESSAGE, ADD_HISTORY, TOGGLE_MESSAGES, TOGGLE_NOTES } from './chatActions';
+import { IMessage, INote } from '../types/Chat';
 
 // Define/export the type for the ChatState object
 export type ChatState = {
 	messages: IMessage[];
-	isChatOpen: boolean;
+	notes: INote[];
+	isMessagesOpen: boolean;
+	isNotesOpen: boolean;
 };
 
 // Define the acceptable action object types for the ChatAction object
@@ -19,7 +21,11 @@ type ChatAction =
 			payload: { history: IMessage[] };
 	  }
 	| {
-			type: typeof TOGGLE_CHAT;
+			type: typeof TOGGLE_MESSAGES;
+			payload: { isOpen: boolean };
+	  }
+	| {
+			type: typeof TOGGLE_NOTES;
 			payload: { isOpen: boolean };
 	  };
 
@@ -38,11 +44,42 @@ export const chatReducer = (state: ChatState, action: ChatAction) => {
 				...state,
 				messages: action.payload.history,
 			};
-		// Updates state when chat is opened/closed
-		case TOGGLE_CHAT:
+		// Opens/closes chat messages
+		case TOGGLE_MESSAGES:
+			/*
+			====================
+			Case 1:
+				notesClosed && messagesClosed
+				--> notesClosed --> messagesOpen
+				
+			Case 2:
+				notesCloseed && messagesOpen
+				--> notesClosed --> messagesClosed
+
+			Case 3:
+				notesOpen	&& messagesClosed
+				--> notesClosed --> messagesOpen
+			
+			Case 4:
+				notesOpen && messagesOpen
+				--> Impossible
+
+			Conclusion ==> The opposite feature should be closed regardless of it's value in state or the payload
+			====================
+			*/
+
 			return {
 				...state,
-				isChatOpen: action.payload.isOpen,
+				isMessagesOpen: action.payload.isOpen,
+				isNotesOpen: false,
+			};
+		// Opens/closes chat notes
+		case TOGGLE_NOTES:
+			// See logic in TOGGLE_MESSAGES
+			return {
+				...state,
+				isNotesOpen: action.payload.isOpen,
+				isMessagesOpen: false,
 			};
 		// Return the existing state object by default
 		default:
