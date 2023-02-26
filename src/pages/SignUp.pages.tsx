@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, signInWithGoogle } from '../firebase';
@@ -48,10 +48,11 @@ export const SignUpPage = () => {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log(result);
+      console.log('result: ', result);
     } catch (error) {
       console.log(error);
     }
+
   };
 
   // Use the useForm hook to handle the form state and validation

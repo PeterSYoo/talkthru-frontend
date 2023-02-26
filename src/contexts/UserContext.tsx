@@ -9,7 +9,7 @@ export const UserContext = createContext<null | any>(null);
 // Room provider component to manage state and provide context
 export const UserProvider = ({ children }: { children: any }) => {
 	const [userData, setUserData] = useState<any>({});
-	const { id, name, subject, expertise, matching } = userData;
+	const { id, name, subject, expertise, matching, profile } = userData;
 
 	const handleFetchUserData = async () => {
 		try {
@@ -38,7 +38,7 @@ export const UserProvider = ({ children }: { children: any }) => {
 	}, []);
 
 	return (
-		<UserContext.Provider value={{ userId: id, userName: name, subject, expertise, matching }}>
+		<UserContext.Provider value={{ userId: id, userName: name, subject, expertise, matching, profile }}>
 			{children}
 		</UserContext.Provider>
 	);

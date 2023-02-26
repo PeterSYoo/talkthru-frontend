@@ -1,4 +1,35 @@
+import { UserContext } from '../contexts/UserContext';
+import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Prisma } from '@prisma/client';
+
+const server_url = import.meta.env.VITE_BACKEND_URL as string;
+
 export const ProfilePage = () => {
+const { userId, profile } = useContext(UserContext);
+
+const createProfile = async () => {
+  try {
+      await fetch(`${server_url}/profiles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userId),
+      });
+      console.log('Created new user profile for ', userId);
+    } catch (error) {
+      console.log(error);
+    }
+}
+
+useEffect(() => {
+  if (!profile) {
+    createProfile();
+  }
+  console.log("current user: ", userId);
+}, [userId]);
+
   return (
     <>
       <div className="grid w-full grid-rows-[176px_104px_25px_1fr]">
