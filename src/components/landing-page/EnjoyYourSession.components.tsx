@@ -2,7 +2,7 @@ export const EnjoyYourSession = () => {
   return (
     <>
       <div className="flex h-screen w-full items-center justify-center bg-[#17153A]">
-        <div className="flex items-center gap-[111px]">
+        <div className="flex items-center gap-[111px] px-5">
           {/* Image */}
           <div>
             <img
