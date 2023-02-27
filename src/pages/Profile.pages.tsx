@@ -1,12 +1,58 @@
 import { UserContext } from '../contexts/UserContext';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Prisma } from '@prisma/client';
+import * as z from 'zod';
 
+// Type for the input fields of the form
+type Inputs = {
+  email: string;
+  password: string;
+};
+
+// Type for the form schema
+type FormSchemaType = z.infer<typeof FormSchema>;
+
+// Set the URL of the backend server
 const server_url = import.meta.env.VITE_BACKEND_URL as string;
 
+// Schema for the form inputs
+const FormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().max(24),
+})
+
 export const ProfilePage = () => {
-const { userId, profile } = useContext(UserContext);
+const { userId } = useContext(UserContext);
+
+const [ picture, setPicture ] = useState('');
+const [ userName, setUserName ] = useState('');
+const [ bio, setBio ] = useState('');
+const [ occupation, setOccupation ] = useState('');
+const [ location, setLocation ] = useState('');
+
+const updatedProfile = {
+  picture,
+  userName,
+  bio,
+  occupation,
+  location,
+}
+
+const updateProfile = async () => {
+  try {
+    const response = await fetch('/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({userId: userId, ...updatedProfile})
+    });
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
   return (
     <>
