@@ -1,29 +1,42 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HamburgerModal } from './HamburgerModal.components';
 
 export const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
+  const [menuLocation, setMenuLocation] = useState<string>('');
+
+  const navigate = useNavigate();
 
   const location = useLocation();
   const isRoot = location.pathname === '/';
   const isSignup = location.pathname === '/signup';
   const isLogin = location.pathname === '/login';
-  const isPreMeet = location.pathname === '/premeet';
-  const isSettings = location.pathname === '/settings';
-  const isProfile = location.pathname === '/profile';
+
+  const handleMenuClick = (menuLocation: string) => {
+    setMenuLocation(menuLocation);
+    setIsHamburgerOpen(!isHamburgerOpen);
+  };
+
+  const handleLogoutClick = (menuLocation: string) => {
+    localStorage.removeItem('token'); // Remove the token from local storage
+    setMenuLocation(menuLocation);
+    setIsHamburgerOpen(!isHamburgerOpen);
+    navigate('/login'); // Redirect to the login page
+  };
 
   return (
     <>
       <div
         className={`${
           isRoot && 'absolute top-0 z-10'
-        } h-[88px] w-full bg-[#17153A]`}
+        } h-[92px] w-full bg-[#17153A]`}
       >
         <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between gap-[50px]">
           <div className="flex w-full max-w-[960px] items-center">
             {!isRoot && !isSignup && !isLogin && (
               <>
+                {/* Hamburger Menu opens modal on click */}
                 <button
                   className="pl-[24px]"
                   onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
@@ -35,29 +48,32 @@ export const Header = () => {
                 </button>
                 {isHamburgerOpen && (
                   <HamburgerModal
-                    isHamburgerOpen={isHamburgerOpen}
                     setIsHamburgerOpen={setIsHamburgerOpen}
+                    menuLocation={menuLocation}
+                    handleMenuClick={handleMenuClick}
+                    handleLogoutClick={handleLogoutClick}
                   />
                 )}
               </>
             )}
-            <img
-              src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676329496/TalkThru/Landing%20Page/TalkThru_logo_zalxz1.png"
-              alt="logo"
-              className="min-h-[88px] min-w-[203px]"
-            />
+            <div>
+              <img
+                src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677461654/TalkThru/Header/tt-logo_pyydfe.png"
+                alt="logo"
+              />
+            </div>
           </div>
           <div className="flex items-center gap-[38px] pr-[58px]">
             {/* Conditionally Render Login, Signup, Avatar */}
             {(isLogin || isRoot || isSignup) && (
               <>
                 {!isLogin && (
-                  <button className="flex h-[50px] w-[145px] items-center justify-center rounded-full bg-[#F1F192] text-[25px] font-medium">
+                  <button className="flex h-[48px] w-[148px] items-center justify-center rounded-full bg-[#F1F192] text-[25px] font-medium hover:bg-[#E4E325]">
                     <Link to="/login">Login</Link>
                   </button>
                 )}
                 {!isSignup && (
-                  <button className="flex h-[50px] w-[145px] items-center justify-center rounded-full border-2 border-[#BFBFBF] bg-[#FFFFFF] text-[25px] font-medium">
+                  <button className="flex h-[48px] w-[148px] items-center justify-center rounded-full bg-[#F1F192] text-[25px] font-medium hover:bg-[#E4E325]">
                     <Link to="/signup">Sign up</Link>
                   </button>
                 )}
