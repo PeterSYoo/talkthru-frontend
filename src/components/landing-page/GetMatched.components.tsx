@@ -22,7 +22,7 @@ export const GetMatched = () => {
   return (
     <>
       <div className="flex h-screen w-full items-center justify-center">
-        <div className="flex items-center gap-[48px]">
+        <div className="flex items-center gap-[48px] px-5">
           {/* Info Text */}
           <div className="flex max-w-[658px] flex-col gap-[54px]">
             {/* Heading */}
