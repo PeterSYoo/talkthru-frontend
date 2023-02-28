@@ -16,9 +16,7 @@ export const MatchMePage = () => {
 	const [matchedUser, setMatchedUser] = useState<any>();
 	const { enterRoom } = useContext(RoomContext);
 
-	const handleMatchUser = async (expertise: string, chosenExpertise: string) => {
-		setExpertise(chosenExpertise);
-
+	const handleMatchUser = async (expertise: string) => {
 		try {
 			const response = await fetch(`${server_url}/matching/choose-expertise`, {
 				method: 'PUT',
@@ -26,8 +24,8 @@ export const MatchMePage = () => {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					userSubject,
-					userId,
+					subject: userSubject,
+					id: userId,
 					expertise,
 				}),
 			});
