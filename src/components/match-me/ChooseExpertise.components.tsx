@@ -3,13 +3,11 @@ export const ChooseExpertise = ({
 	setSubject,
 	expertise,
 	setExpertise,
-	handleMatchUser,
 }: {
 	subject: string;
 	setSubject: (subject: string) => void;
 	expertise: string;
 	setExpertise: (expertise: string) => void;
-	handleMatchUser: (expertise: string) => void;
 }) => {
 	return (
 		<>
@@ -41,10 +39,7 @@ export const ChooseExpertise = ({
 							alt='beginner'
 						/>
 						<button
-							onClick={() => {
-								setExpertise('Beginner');
-								handleMatchUser(expertise);
-							}}
+							onClick={() => setExpertise('Beginner')}
 							className='flex h-[50px] w-[405px] items-center justify-center rounded-full bg-[#F1F192] text-[25px]'>
 							Beginner
 						</button>
@@ -59,10 +54,7 @@ export const ChooseExpertise = ({
 							alt='intermediate'
 						/>
 						<button
-							onClick={() => {
-								setExpertise('Intermediate');
-								handleMatchUser(expertise);
-							}}
+							onClick={() => setExpertise('Intermediate')}
 							className='flex h-[50px] w-[405px] items-center justify-center rounded-full bg-[#E4E325] text-[25px]'>
 							Intermediate
 						</button>
@@ -77,10 +69,7 @@ export const ChooseExpertise = ({
 							alt='advanced'
 						/>
 						<button
-							onClick={() => {
-								setExpertise('Advanced');
-								handleMatchUser(expertise);
-							}}
+							onClick={() => setExpertise('Advanced')}
 							className='flex h-[50px] w-[405px] items-center justify-center rounded-full bg-[#ABAA1C] text-[25px]'>
 							Advanced
 						</button>

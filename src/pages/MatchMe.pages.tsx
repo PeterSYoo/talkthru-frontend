@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { CreateButton } from '../components/CreateButton.components';
 import { ChooseExpertise } from '../components/match-me/ChooseExpertise.components';
 import { ChooseSubject } from '../components/match-me/ChooseSubject.components';
 import { LookingForUser } from '../components/match-me/LookingForUser.components';
@@ -15,8 +16,11 @@ export const MatchMePage = () => {
 	const { userId, subject: userSubject } = useContext(UserContext);
 	const [matchedUser, setMatchedUser] = useState<any>();
 	const { enterRoom } = useContext(RoomContext);
+	const [canSearch, setCanSearch] = useState<boolean>(false);
+	const [searching, setSearching] = useState<boolean>(false);
 
-	const handleMatchUser = async (expertise: string) => {
+	const handleMatchUser = async () => {
+		console.log('handleMatchingUser Called');
 		try {
 			const response = await fetch(`${server_url}/matching/choose-expertise`, {
 				method: 'PUT',
@@ -43,6 +47,17 @@ export const MatchMePage = () => {
 		}
 	};
 
+	useEffect(() => {
+		setCanSearch(subject !== '' && expertise !== '');
+	}, [subject, expertise]);
+
+	useEffect(() => {
+		setSearching(canSearch);
+	}, [setCanSearch]);
+
+	console.log({ subject });
+	console.log({ expertise });
+
 	return (
 		<>
 			{/* Demo for updating user subject and expertise on backend */}
@@ -67,14 +82,15 @@ export const MatchMePage = () => {
 								setSubject={setSubject}
 								expertise={expertise}
 								setExpertise={setExpertise}
-								handleMatchUser={handleMatchUser}
 							/>
 						)}
 					</>
 				)}
 
+				{canSearch && <CreateButton onClick={handleMatchUser} />}
+
 				{/* Looking for User */}
-				{expertise !== '' && <LookingForUser setExpertise={setExpertise} subject={subject} />}
+				{searching && <LookingForUser setExpertise={setExpertise} subject={subject} />}
 			</div>
 		</>
 	);
