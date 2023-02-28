@@ -35,7 +35,6 @@ export const PageRoutes = () => {
 				<Route path='/profile/' element={<ProtectedProfilePage />} />
 				<Route path='/profile/:id' element={<ProfilePage />} />
 				<Route path='/home' element={<HomePage />} />
-
 				<Route path='/settings' element={<ProtectedSettingsPage />} />
 			</Routes>
 			<RoomProvider>
