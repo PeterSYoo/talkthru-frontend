@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const ChatStudyConnect = () => {
+export const ChatStudyConnect = ({
+  handleScroll,
+}: {
+  handleScroll: () => void;
+}) => {
   const [chat, setChat] = useState(
     <>
       Chat
@@ -47,23 +51,25 @@ export const ChatStudyConnect = () => {
         <div className="flex h-full flex-col bg-white">
           <div className="flex h-full items-center justify-center gap-[129px]">
             {/* Info Text */}
-            <div>
+            <div className="flex flex-col gap-[88px]">
               {/* Heading */}
-              <h1 className="max-w-[429px] pt-[50px] text-[60px] font-bold leading-[70.38px]">
+              <h1 className="max-w-[429px] text-[60px] font-bold leading-[70.38px]">
                 {chat} {study} {connect}
               </h1>
-              {/* Paragraph */}
-              <p className="max-w-[531px] pt-[88px] text-[22px] font-medium leading-[33px]">
-                Need support when it comes to your studies? Want to work things
-                through with a peer? Create an account to access our service and
-                get connected with someone now!
-              </p>
-              {/* Sign Up Button */}
-              <Link to="/signup">
-                <button className="mt-[47px] flex h-[50px] w-[395px] items-center justify-center rounded-[30px] bg-[#F1F192] text-[25px] font-medium  hover:bg-[#E4E325]">
-                  Sign Up
-                </button>
-              </Link>
+              <div>
+                {/* Paragraph */}
+                <p className="max-w-[531px] text-[22px] font-medium leading-[33px]">
+                  Need support when it comes to your studies? Want to work
+                  things through with a peer? Create an account to access our
+                  service and get connected with someone now!
+                </p>
+                {/* Sign Up Button */}
+                <Link to="/signup">
+                  <button className="mt-[47px] flex h-[50px] w-[395px] items-center justify-center rounded-[30px] bg-[#F1F192] text-[25px] font-medium  hover:bg-[#E4E325]">
+                    Sign Up
+                  </button>
+                </Link>
+              </div>
             </div>
             {/* Image */}
             <div>
@@ -75,7 +81,10 @@ export const ChatStudyConnect = () => {
           </div>
           <div className="flex flex-col items-center gap-[21px] pb-[33px]">
             <div>
-              <button className="flex h-[65px] w-[65px] justify-center rounded-full bg-[#17153A]">
+              <button
+                onClick={() => handleScroll()}
+                className="flex h-[65px] w-[65px] justify-center rounded-full bg-[#17153A]"
+              >
                 <img
                   src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1676767452/TalkThru/Landing%20Page/down_vector_m7rq5j.png"
                   alt="down-button"
