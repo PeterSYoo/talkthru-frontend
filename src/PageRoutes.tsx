@@ -25,7 +25,7 @@ export const PageRoutes = () => {
   return (
     <div
       className={`${
-        isNotRoot && 'grid h-screen grid-rows-[88px_1fr]'
+        isNotRoot && 'grid h-screen grid-rows-[92px_1fr]'
       } font-poppins`}
     >
       {isNotRoot && <Header />}

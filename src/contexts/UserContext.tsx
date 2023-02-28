@@ -8,38 +8,40 @@ export const UserContext = createContext<null | any>(null);
 
 // Room provider component to manage state and provide context
 export const UserProvider = ({ children }: { children: any }) => {
-	const [userData, setUserData] = useState<any>({});
-	const { id, name, subject, expertise, matching, profile } = userData;
+  const [userData, setUserData] = useState<any>({});
+  const { id, name, subject, expertise, matching } = userData;
 
-	const handleFetchUserData = async () => {
-		try {
-			const token = localStorage.getItem('token');
-			if (!token) {
-				console.log('Token not found');
-				return;
-			}
-			const response = await fetch(`${server_url}/user`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			const result = await response.json();
-			if (response.ok) {
-				setUserData(result);
-				console.log(result);
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  const handleFetchUserData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('Token not found');
+        return;
+      }
+      const response = await fetch(`${server_url}/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setUserData(result);
+        console.log(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-	useEffect(() => {
-		handleFetchUserData();
-	}, []);
+  useEffect(() => {
+    handleFetchUserData();
+  }, []);
 
-	return (
-		<UserContext.Provider value={{ userId: id, userName: name, subject, expertise, matching, profile }}>
-			{children}
-		</UserContext.Provider>
-	);
+  return (
+    <UserContext.Provider
+      value={{ userId: id, userName: name, subject, expertise, matching }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
