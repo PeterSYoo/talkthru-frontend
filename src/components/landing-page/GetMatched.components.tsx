@@ -22,9 +22,9 @@ export const GetMatched = () => {
   return (
     <>
       <div className="flex h-screen w-full items-center justify-center">
-        <div className="flex items-center gap-[48px]">
+        <div className="flex items-center gap-[48px] px-5">
           {/* Info Text */}
-          <div className="flex max-w-[658px] flex-col gap-[54px]">
+          <div className="flex max-w-[658px] flex-col gap-[49px]">
             {/* Heading */}
             <h1 className="text-[60px] font-bold leading-[90px]">
               Get matched
@@ -34,7 +34,8 @@ export const GetMatched = () => {
               After searching for a subject, choose a skill level for your
               selected field. TalkThru’s technology will then match you with a
               random study partner. Once matched, you will be shown a preview of
-              your partner, and be prompted to start a video session with them.
+              your partner, and will be prompted to start a video session with
+              them.
             </p>
           </div>
           {/* Image */}

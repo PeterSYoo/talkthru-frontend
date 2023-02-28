@@ -44,7 +44,7 @@ const createPScaleUser = async (name: string, email: string) => {
     const user = auth.currentUser;
     const token = await user?.getIdToken();
 
-    const response = await fetch('http://localhost:8080/users', {
+    const response = await fetch('https://talkthru-backend.herokuapp.com/users', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
