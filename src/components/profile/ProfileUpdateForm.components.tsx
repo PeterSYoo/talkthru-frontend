@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
 
-interface Props {
+export interface Props {
   onSubmit: (data: ProfileUpdateData) => void;
   defaultValues: ProfileUpdateData;
 }
 
-interface ProfileUpdateData {
+export interface ProfileUpdateData {
   picture?: string;
   userName?: string;
   bio?: string;
