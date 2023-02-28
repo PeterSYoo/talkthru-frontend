@@ -37,13 +37,36 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [peers, dispatch] = useReducer(peersReducer, {});
 	// State to keep track of the room ID for the local peer
 	const [roomId, setRoomId] = useState<string>('');
+	const [matchedUserId, setMatchedUserId] = useState<any>();
 
 	// Destructure context for the props we need
 	const { name: userName, id: userId } = useContext(UserContext);
 
-	// Function to navigate to a specific room page
+	// Function to join a room when room is created or when a user is matched
 	const enterRoom = ({ roomId }: { roomId: string }) => {
-		navigate(`/room/${roomId}`);
+		webSocket.emit('join-room', { roomId, userId, userName });
+
+		webSocket.once('room-ready', (participants: IPeer[]) => {
+			const otherUser = participants.find((user) => user.peerId !== userId);
+			setMatchedUserId(otherUser?.peerId);
+
+			// API CALL FOR USER DATA
+
+			setTimeout(() => {
+				navigate(`/room/${roomId}`);
+			}, 3000);
+		});
+
+		// webSocket.once('room-ready', ({ participants }: { participants: Record<string, IPeer> }) => {
+		// 	getUsers({ participants });
+		// });
+
+		// const otherUser = participants.find((user) => user.peerId !== userId);
+		// setMatchedUserId(otherUser?.peerId);
+
+		// setTimeout(() => {
+		// 	navigate(`/room/${roomId}`);
+		// }, 3000);
 	};
 
 	// Function to send outgoing call
@@ -216,6 +239,11 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		};
 	}, [me, stream, userName]);
 
+	console.log({ me });
+	console.log({ stream });
+	console.log({ roomId });
+	console.log({ peers });
+
 	// Render the RoomContext provider with websocket, peer, and stream as values
 	return (
 		<RoomContext.Provider
@@ -225,8 +253,10 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				screenSharingId,
 				peers,
 				roomId,
+				matchedUserId,
 				shareScreen,
 				setRoomId,
+				enterRoom,
 			}}>
 			{children}
 		</RoomContext.Provider>
