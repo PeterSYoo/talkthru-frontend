@@ -2,7 +2,7 @@ export const SearchForASubject = () => {
   return (
     <>
       <div className="flex h-screen w-full items-center justify-center bg-[#17153A]">
-        <div className="flex items-center gap-[111px]">
+        <div className="flex items-center gap-[111px] px-5">
           {/* Image */}
           <div>
             <img
@@ -11,7 +11,7 @@ export const SearchForASubject = () => {
             />
           </div>
           {/* Info Text */}
-          <div className="flex max-w-[616px] flex-col gap-[41px]">
+          <div className="flex max-w-[616px] flex-col gap-[67px]">
             {/* Heading */}
             <h1 className="text-[60px] font-bold leading-[90px] text-white">
               Search for a subject

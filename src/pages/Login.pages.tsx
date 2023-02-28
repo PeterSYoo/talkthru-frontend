@@ -5,6 +5,9 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import * as z from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Prisma } from '@prisma/client';
+import { UserContext } from '../contexts/UserContext';
+import { updateCurrentUser } from 'firebase/auth';
 
 // Type for the input fields of the form
 type Inputs = {
@@ -22,10 +25,11 @@ const server_url = import.meta.env.VITE_BACKEND_URL as string;
 const FormSchema = z.object({
   email: z.string().email(),
   password: z.string().max(24),
-});
+})
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+
 
   // Function to handle user login
   const handleLoginSubmit = async (data: Inputs) => {

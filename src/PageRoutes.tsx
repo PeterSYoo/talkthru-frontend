@@ -24,7 +24,7 @@ export const PageRoutes = () => {
 	const ProtectedSettingsPage = useProtectedRoute(SettingsPage);
 
 	return (
-		<div className={`${isNotRoot && 'grid h-screen grid-rows-[88px_1fr]'} font-poppins`}>
+		<div className={`${isNotRoot && 'grid h-screen grid-rows-[92px_1fr]'} font-poppins`}>
 			{isNotRoot && <Header />}
 			<Routes>
 				<Route path='/' element={<LandingPage />} />
