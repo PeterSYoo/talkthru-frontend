@@ -5,6 +5,7 @@ import { ChooseExpertise } from '../components/match-me/ChooseExpertise.componen
 import { ChooseSubject } from '../components/match-me/ChooseSubject.components';
 import { LookingForUser } from '../components/match-me/LookingForUser.components';
 import { UserContext } from '../contexts/UserContext';
+import { webSocket } from '../webSocket';
 
 // Set the URL of the backend server
 const server_url = import.meta.env.VITE_BACKEND_URL as string;
@@ -13,7 +14,7 @@ export const MatchMePage = () => {
 	const navigate = useNavigate();
 	const [selectedSubject, setSelectedSubject] = useState<string>('');
 	const [selectedExpertise, setSelectedExpertise] = useState<string>('');
-	const { userData, setUserData, userId, subject: userSubject } = useContext(UserContext);
+	const { userData, setUserData, handleFetchUserData, userId } = useContext(UserContext);
 	const [matchedUser, setMatchedUser] = useState<any>();
 	const [canSearch, setCanSearch] = useState<boolean>(false);
 	const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -74,11 +75,16 @@ export const MatchMePage = () => {
 
 			const result = await response.json();
 			console.log({ result });
+			webSocket.emit('join-room', { roomId: result });
 			navigate(`/room/${result}`);
 		} catch (error) {
 			console.error(error);
 		}
 	};
+
+	useEffect(() => {
+		handleFetchUserData(userId, selectedSubject);
+	}, []);
 
 	useEffect(() => {
 		handleUpdateSubject(userId, selectedSubject);
