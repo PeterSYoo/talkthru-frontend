@@ -36,21 +36,19 @@ export const PageRoutes = () => {
 				<Route path='/profile/:id' element={<ProfilePage />} />
 				<Route path='/home' element={<HomePage />} />
 				<Route path='/settings' element={<ProtectedSettingsPage />} />
-			</Routes>
-			<RoomProvider>
-				<Routes>
-					<Route path='/match-me' element={<ProtectedMatchMePage />} />
-					<Route
-						path='/room/:id'
-						element={
+				<Route path='/match-me' element={<ProtectedMatchMePage />} />
+				<Route
+					path='/room/:id'
+					element={
+						<RoomProvider>
 							<ChatProvider>
 								<RoomPage />
 							</ChatProvider>
-						}
-					/>
-					<Route path='/room/:id/postmeeting' element={<PostMeetingPage />} />
-				</Routes>
-			</RoomProvider>
+						</RoomProvider>
+					}
+				/>
+				<Route path='/room/:id/postmeeting' element={<PostMeetingPage />} />
+			</Routes>
 		</div>
 	);
 };

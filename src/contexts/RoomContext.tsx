@@ -17,6 +17,9 @@ interface IPeer {
 	peerId: string;
 }
 
+// Set the URL of the backend server
+const server_url = import.meta.env.VITE_BACKEND_URL as string;
+
 // Create a context for sharing data across components
 export const RoomContext = createContext<null | any>(null);
 
@@ -40,7 +43,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [matchedUserId, setMatchedUserId] = useState<any>();
 
 	// Destructure context for the props we need
-	const { name: userName, id: userId } = useContext(UserContext);
+	const { userName, userId, userData, setUserData } = useContext(UserContext);
 
 	// Function to join a room when room is created or when a user is matched
 	const enterRoom = ({ roomId }: { roomId: string }) => {
@@ -67,6 +70,29 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		// setTimeout(() => {
 		// 	navigate(`/room/${roomId}`);
 		// }, 3000);
+	};
+
+	const handleUpdateRoomId = async (id: string, roomId: string) => {
+		console.log('handleUpdateRoomId Called');
+		try {
+			const response = await fetch(`${server_url}/matching/update-roomid`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ id, roomId }),
+			});
+
+			const result = await response.json();
+			console.log({ result });
+
+			if (response.ok) {
+				setUserData(result);
+				// navigate(`/room/${roomId}`);
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	// Function to send outgoing call
@@ -239,10 +265,10 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		};
 	}, [me, stream, userName]);
 
-	console.log({ me });
-	console.log({ stream });
-	console.log({ roomId });
-	console.log({ peers });
+	// console.log({ me });
+	// console.log({ stream });
+	// console.log({ roomId });
+	// console.log({ peers });
 
 	// Render the RoomContext provider with websocket, peer, and stream as values
 	return (
@@ -257,6 +283,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				shareScreen,
 				setRoomId,
 				enterRoom,
+				handleUpdateRoomId,
 			}}>
 			{children}
 		</RoomContext.Provider>
