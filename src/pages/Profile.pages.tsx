@@ -51,28 +51,6 @@ const handleProfileUpdate = async (data: ProfileUpdateData, profilePicture?: Fil
       },
       body: JSON.stringify(data),
     };
-    // if (profilePicture) {
-    //   const formData = new FormData();
-    //   formData.append('file', profilePicture);
-    //   formData.append('upload_preset', 'talkthru');
-    //   requestOptions.method = 'POST';
-    //   requestOptions.body = formData;
-    // } else {
-    //   requestOptions.headers = {
-    //     ...requestOptions.headers,
-    //     'Content-Type': 'application/json',
-    //   };
-    //   requestOptions.body = JSON.stringify(data);
-
-    // }
-    // const response = await fetch(`${server_url}/profile`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Bearer ${token}`
-    //   },
-    //   body: JSON.stringify(data)
-    // });
     const response = await fetch(`${server_url}/profile`, requestOptions);
     const result = await response.json();
 
@@ -86,34 +64,6 @@ const handleProfileUpdate = async (data: ProfileUpdateData, profilePicture?: Fil
     console.log(error);
   }
 }
-
-// const [ picture, setPicture ] = useState('');
-// const [ userName, setUserName ] = useState('');
-// const [ bio, setBio ] = useState('');
-// const [ occupation, setOccupation ] = useState('');
-// const [ location, setLocation ] = useState('');
-
-// const updatedProfile = {
-//   picture,
-//   userName,
-//   bio,
-//   occupation,
-//   location,
-// }
-
-// const updateProfile = async () => {
-//   try {
-//     const response = await fetch('/profile', {
-//       method: 'PUT',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({userId: userId, ...updatedProfile})
-//     });
-//     const result = await response.json();
-//     console.log(result);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
   useEffect(() => {
     fetchProfile();
