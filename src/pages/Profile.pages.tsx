@@ -40,17 +40,40 @@ const fetchProfile = async () => {
   }
 };
 
-const handleProfileUpdate = async (data: ProfileUpdateData) => {
+const handleProfileUpdate = async (data: ProfileUpdateData, profilePicture?: File) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${server_url}/profile`, {
+    const requestOptions: RequestInit = {
       method: 'PUT',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(data)
-    });
+      body: JSON.stringify(data),
+    };
+    // if (profilePicture) {
+    //   const formData = new FormData();
+    //   formData.append('file', profilePicture);
+    //   formData.append('upload_preset', 'talkthru');
+    //   requestOptions.method = 'POST';
+    //   requestOptions.body = formData;
+    // } else {
+    //   requestOptions.headers = {
+    //     ...requestOptions.headers,
+    //     'Content-Type': 'application/json',
+    //   };
+    //   requestOptions.body = JSON.stringify(data);
+
+    // }
+    // const response = await fetch(`${server_url}/profile`, {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${token}`
+    //   },
+    //   body: JSON.stringify(data)
+    // });
+    const response = await fetch(`${server_url}/profile`, requestOptions);
     const result = await response.json();
 
     if (response.ok) {
@@ -105,6 +128,7 @@ const handleProfileUpdate = async (data: ProfileUpdateData) => {
   return (
     <div>
       <h1>Profile</h1>
+      {profile.picture ? <img src={profile.picture}/> : <p>no profile picture</p>}
       <p>Username: {profile.userName}</p>
       <p>Bio: {profile.bio}</p>
       <p>Occupation: {profile.occupation}</p>
