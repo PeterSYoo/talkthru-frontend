@@ -1,8 +1,8 @@
 import 'swiper/css';
-import { ArtsAndHumanities } from './choose-subject/ArtsAndHumanities.components';
-import { BusinessAndEconomicDevelopment } from './choose-subject/BusinessAndEconomicDevelopment.components';
-import { STEM } from './choose-subject/STEM.components';
-import { TrendingNow } from './choose-subject/TrendingNow.components';
+import { ArtsAndHumanities } from './ArtsAndHumanities.components';
+import { BusinessAndEconomicDevelopment } from './BusinessAndEconomicDevelopment.components';
+import { STEM } from './STEM.components';
+import { TrendingNow } from './TrendingNow.components';
 
 export const ChooseSubject = ({
   setSubject,

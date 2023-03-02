@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreateButton } from '../components/CreateButton.components';
 import { ChooseExpertise } from '../components/match-me/ChooseExpertise.components';
-import { ChooseSubject } from '../components/match-me/ChooseSubject.components';
+import { ChooseSubject } from '../components/match-me/choose-subject/ChooseSubject.components';
 import { LookingForUser } from '../components/match-me/LookingForUser.components';
 import { UserContext } from '../contexts/UserContext';
 
