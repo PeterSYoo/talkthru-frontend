@@ -26,8 +26,15 @@ export const RoomPage = () => {
 
 	// Destructure context for the props we need
 	const { userName, userId } = useContext(UserContext);
-	const { stream, screenStream, screenSharingId, peers, shareScreen, setRoomId } =
-		useContext(RoomContext);
+	const {
+		stream,
+		screenStream,
+		screenSharingId,
+		peers,
+		shareScreen,
+		setRoomId,
+		handleUpdateRoomId,
+	} = useContext(RoomContext);
 	const { chat, toggleChat } = useContext(ChatContext);
 
 	// Emits 'join-room' event after 'stream' object is available
@@ -39,7 +46,7 @@ export const RoomPage = () => {
 
 	// Updates 'roomId' state when local peer joins/leaves a room
 	useEffect(() => {
-		setRoomId(id);
+		handleUpdateRoomId(userId, id);
 	}, [id, setRoomId]);
 
 	// Ternary to determine which peer is sharing their screen

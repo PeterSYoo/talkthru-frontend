@@ -38,10 +38,9 @@ export const UserProvider = ({ children }: { children: any }) => {
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{ userId: id, userName: name, subject, expertise, matching }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
+		<UserContext.Provider
+			value={{ userData, setUserData, userId: id, userName: name, subject, expertise, matching }}>
+			{children}
+		</UserContext.Provider>
+	);
 };
