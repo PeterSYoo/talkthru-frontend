@@ -25,8 +25,9 @@ export const RoomPage = () => {
 	const { id } = useParams();
 
 	// Destructure context for the props we need
-	const { userName, userId } = useContext(UserContext);
+	const { userData, userName, userId, handleFetchUserData } = useContext(UserContext);
 	const {
+		roomId,
 		stream,
 		screenStream,
 		screenSharingId,
@@ -37,16 +38,22 @@ export const RoomPage = () => {
 	} = useContext(RoomContext);
 	const { chat, toggleChat } = useContext(ChatContext);
 
+	useEffect(() => {
+		handleFetchUserData();
+	}, []);
+
 	// Emits 'join-room' event after 'stream' object is available
 	useEffect(() => {
-		if (stream) {
+		if (stream && userId) {
+			console.log('Stream is valid, "join-room" emitted');
 			webSocket.emit('join-room', { roomId: id, peerId: userId, userName });
 		}
 	}, [id, userId, stream, userName]);
 
 	// Updates 'roomId' state when local peer joins/leaves a room
 	useEffect(() => {
-		handleUpdateRoomId(userId, id);
+		setRoomId(id);
+		// handleUpdateRoomId(userId, id);
 	}, [id, setRoomId]);
 
 	// Ternary to determine which peer is sharing their screen
@@ -58,6 +65,10 @@ export const RoomPage = () => {
 	const { [screenSharingId]: sharing, ...peersToShow } = peers;
 	// Isolate the remote peer from the local peer
 	const remotePeer = Object.values(peers as PeersState).filter((peer) => peer.peerId !== userId)[0];
+
+	// console.log({ stream });
+	// console.log({ id });
+	console.log({ remotePeer });
 
 	return (
 		<>

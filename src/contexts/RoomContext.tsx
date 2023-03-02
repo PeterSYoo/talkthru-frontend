@@ -43,33 +43,11 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [matchedUserId, setMatchedUserId] = useState<any>();
 
 	// Destructure context for the props we need
-	const { userName, userId, userData, setUserData } = useContext(UserContext);
+	const { userName, userId, userData, setUserData, handleFetchUserData } = useContext(UserContext);
 
 	// Function to join a room when room is created or when a user is matched
 	const enterRoom = ({ roomId }: { roomId: string }) => {
-		webSocket.emit('join-room', { roomId, userId, userName });
-
-		webSocket.once('room-ready', (participants: IPeer[]) => {
-			const otherUser = participants.find((user) => user.peerId !== userId);
-			setMatchedUserId(otherUser?.peerId);
-
-			// API CALL FOR USER DATA
-
-			setTimeout(() => {
-				navigate(`/room/${roomId}`);
-			}, 3000);
-		});
-
-		// webSocket.once('room-ready', ({ participants }: { participants: Record<string, IPeer> }) => {
-		// 	getUsers({ participants });
-		// });
-
-		// const otherUser = participants.find((user) => user.peerId !== userId);
-		// setMatchedUserId(otherUser?.peerId);
-
-		// setTimeout(() => {
-		// 	navigate(`/room/${roomId}`);
-		// }, 3000);
+		navigate(`/room/${roomId}`);
 	};
 
 	const handleUpdateRoomId = async (id: string, roomId: string) => {
@@ -88,7 +66,6 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 			if (response.ok) {
 				setUserData(result);
-				// navigate(`/room/${roomId}`);
 			}
 		} catch (error) {
 			console.error(error);
@@ -97,13 +74,18 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 	// Function to send outgoing call
 	const sendConnection = (peer: IPeer) => {
-		if (!me || !stream) return;
-
+		console.log('sendConnection called', {
+			['me']: !!me,
+			['stream']: !!stream,
+			['peerId']: peer.peerId !== userId,
+		});
+		if (!me || !stream || peer?.peerId === userId) return;
 		// Make an outbound call to the new peer using their peerId and the local media stream
 		// Passing data that other peers need to know as 'metadata' property
 		const call = me.call(peer.peerId, stream, {
 			metadata: { userName },
 		});
+		console.log({ call });
 
 		// Register an event listener for the peer stream
 		call.on('stream', (peerStream) => {
@@ -120,6 +102,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 	// Function to answer incoming call
 	const receiveConnection = (call: MediaConnection) => {
+		console.log('receiveConnection called');
 		// Update peers state with properties from metadata
 		const { userName } = call.metadata;
 		dispatch(addPeerNameAction(call.peer, userName));
@@ -139,7 +122,9 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 	// Function to update 'peers' state with the list of participants in a room
 	const getUsers = ({ participants }: { participants: Record<string, IPeer> }) => {
+		console.log('getUsers called in RoomContext', { ['me']: !!me, ['stream']: !!stream });
 		if (!me || !stream) return;
+		console.log({ participants });
 
 		// Establish a new connection with existing peers in the room
 		Object.values(participants).forEach((peer: IPeer) => {
@@ -202,10 +187,18 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	// useEffect hook initializes the local peer and media stream
 	useEffect(() => {
 		// Create a new Peer instance with userId state
-		const peer = new Peer(userId);
+		const newPeer = new Peer(userId, {
+			host: 'localhost',
+			port: 8080,
+			path: '/',
+		});
+
+		newPeer.on('open', () => {
+			console.log({ ['Open']: 'Connected to signaling server!' });
+		});
 
 		// Store the local peer instance in the state
-		setMe(peer);
+		setMe(newPeer);
 
 		try {
 			// Try to get the local media stream for audio and video
@@ -219,7 +212,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		}
 
 		// Register event listeners for incoming websocket events
-		webSocket.on('room-created', enterRoom);
+		// webSocket.on('room-created', enterRoom);
+		// webSocket.emit('join-room', { roomId: id, peerId: userId, userName });
 		webSocket.on('get-users', getUsers);
 		webSocket.on('user-disconnected', removePeer);
 		webSocket.on('user-started-sharing', (peerId) => setScreenSharingId(peerId));
@@ -235,7 +229,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 			webSocket.off('user-joined');
 			me?.disconnect();
 		};
-	}, []);
+	}, [userId]);
 
 	// Screen Sharing
 	// Executes when a peer starts/stops sharing their screen or local peer leaves the room
@@ -251,24 +245,28 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	// useEffect to handle new peers joining the room
 	useEffect(() => {
 		// Exit if me or stream is not defined
-		if (!me) return;
-		if (!stream) return;
+		if (!me || !stream) return;
 
 		// Register an event listener for a new peer joining the room
 		webSocket.on('user-joined', sendConnection);
-
 		// Register an event listener for incoming calls
 		me.on('call', receiveConnection);
 
+		// Register an event listener to get data for other user in the room
+		webSocket.on('get-users', getUsers);
+
 		return () => {
 			webSocket.off('user-joined');
+			// webSocket.off('get-users');
 		};
-	}, [me, stream, userName]);
+	}, [me, stream]);
 
-	// console.log({ me });
-	// console.log({ stream });
+	console.log({ me });
+	console.log({ stream });
 	// console.log({ roomId });
-	// console.log({ peers });
+	console.log({ userData });
+	// console.log({ userId });
+	console.log({ peers });
 
 	// Render the RoomContext provider with websocket, peer, and stream as values
 	return (
@@ -282,7 +280,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				matchedUserId,
 				shareScreen,
 				setRoomId,
-				enterRoom,
+				// enterRoom,
 				handleUpdateRoomId,
 			}}>
 			{children}

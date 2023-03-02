@@ -14,7 +14,7 @@ export const MatchMePage = () => {
 	const navigate = useNavigate();
 	const [selectedSubject, setSelectedSubject] = useState<string>('');
 	const [selectedExpertise, setSelectedExpertise] = useState<string>('');
-	const { userData, setUserData, handleFetchUserData, userId } = useContext(UserContext);
+	const { userData, setUserData, handleFetchUserData, userId, userName } = useContext(UserContext);
 	const [matchedUser, setMatchedUser] = useState<any>();
 	const [canSearch, setCanSearch] = useState<boolean>(false);
 	const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -75,7 +75,6 @@ export const MatchMePage = () => {
 
 			const result = await response.json();
 			console.log({ result });
-			webSocket.emit('join-room', { roomId: result });
 			navigate(`/room/${result}`);
 		} catch (error) {
 			console.error(error);
@@ -83,7 +82,7 @@ export const MatchMePage = () => {
 	};
 
 	useEffect(() => {
-		handleFetchUserData(userId, selectedSubject);
+		handleFetchUserData();
 	}, []);
 
 	useEffect(() => {
