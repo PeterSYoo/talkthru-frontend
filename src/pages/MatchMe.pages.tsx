@@ -130,8 +130,9 @@ export const MatchMePage = () => {
             subject={selectedSubject}
           />
         )}
+
         {/* Demo for updating user subject and expertise on backend */}
-        <div className="mt-3 flex flex-col items-center gap-3">
+        {/* <div className="mt-3 flex flex-col items-center gap-3">
           {userData && userData.name}
           {canSearch && (
             <button
@@ -142,9 +143,8 @@ export const MatchMePage = () => {
             </button>
           )}
           <div className="font-medium">Name: {matchedUser?.name || 'na'}</div>
-          {/* {matchedUser && <CreateButton onClick={handleMatchUser} />} */}
-        </div>
-        ;
+          {matchedUser && <CreateButton onClick={handleMatchUser} />}
+        </div> */}
       </div>
     </>
   );
