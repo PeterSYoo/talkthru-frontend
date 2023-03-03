@@ -56,7 +56,7 @@ export const Header = () => {
 
       handleFetchUserData();
     }
-  }, []);
+  }, [userData]);
 
   return (
     <>
