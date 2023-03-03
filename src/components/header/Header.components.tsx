@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { HamburgerModal } from './HamburgerModal.components';
+
+// Set the URL of the backend server
+const server_url = import.meta.env.VITE_BACKEND_URL as string;
 
 export const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
   const [menuLocation, setMenuLocation] = useState<string>('');
+  const [userData, setUserData] = useState<any>();
 
   const navigate = useNavigate();
 
@@ -24,6 +28,35 @@ export const Header = () => {
     setIsHamburgerOpen(!isHamburgerOpen);
     navigate('/login'); // Redirect to the login page
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const handleFetchUserData = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            console.log('Token not found');
+            return;
+          }
+          const response = await fetch(`${server_url}/user`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const result = await response.json();
+          if (response.ok) {
+            setUserData(result);
+            console.log(result);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      handleFetchUserData();
+    }
+  }, []);
 
   return (
     <>
@@ -94,10 +127,14 @@ export const Header = () => {
                   />
                 </div>
                 <div className="flex items-center gap-[15px]">
-                  <div>
+                  <div className="h-[49px] w-[49px] rounded-[6px] border-[1.44px] border-[#E4E325] bg-gray-100">
                     <img
-                      src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677048105/TalkThru/Header/toshi_adams_vtreql.png"
-                      alt="toshi"
+                      src={`${
+                        userData?.profile?.picture
+                          ? `${userData.profile.picture}`
+                          : 'https://res.cloudinary.com/dryh1nvhk/image/upload/v1677802098/TalkThru/Header/empty_user_icon_256_1_oytaif.png'
+                      }`}
+                      alt="avatar"
                     />
                   </div>
                   <div className="flex h-full flex-col justify-between text-white">
