@@ -17,7 +17,7 @@ export const PostMeetingPage = () => {
           <div className="flex h-[351px] w-[692px] flex-col items-center gap-[32px] p-0">
             <div className="flex h-[79px] w-[692px] flex-col items-center gap-[10px] p-[10px]">
               <h3 className="text-center text-[22px] font-bold leading-[33px]">
-                Was Jeff helpful?
+                Was mango helpful?
               </h3>
               <p className="text-center text-[18px] leading-[27px]">
                 Your review keeps our small team motivated to make TalkThru even
