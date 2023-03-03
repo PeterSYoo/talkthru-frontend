@@ -8,7 +8,7 @@ const server_url = import.meta.env.VITE_BACKEND_URL as string;
 export const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
   const [menuLocation, setMenuLocation] = useState<string>('');
-  const [userData, setUserData] = useState<any>();
+  const [userData, setUserData] = useState<any>(null);
 
   const navigate = useNavigate();
 
