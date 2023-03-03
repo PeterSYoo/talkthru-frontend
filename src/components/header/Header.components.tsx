@@ -29,6 +29,10 @@ export const Header = () => {
     navigate('/login'); // Redirect to the login page
   };
 
+  if (userData === null) {
+    return <div>Loading</div>;
+  }
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
