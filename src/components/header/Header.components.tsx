@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../contexts/UserContext';
 import { HamburgerModal } from './HamburgerModal.components';
+
+// Set the URL of the backend server
+const server_url = import.meta.env.VITE_BACKEND_URL as string;
 
 export const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
   const [menuLocation, setMenuLocation] = useState<string>('');
+  const { userData, setUserData, handleFetchUserData, userId, userName } =
+    useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -93,20 +99,28 @@ export const Header = () => {
                     alt="unread chat"
                   />
                 </div>
-                <div className="flex items-center gap-[15px]">
-                  <div>
-                    <img
-                      src="https://res.cloudinary.com/dryh1nvhk/image/upload/v1677048105/TalkThru/Header/toshi_adams_vtreql.png"
-                      alt="toshi"
-                    />
+                {userData && (
+                  <div className="flex items-center gap-[15px]">
+                    <div className="h-[49px] w-[49px] rounded-[6px] border-[1.44px] border-[#E4E325] bg-gray-100">
+                      <img
+                        src={`${
+                          userData?.profile?.picture
+                            ? `${userData.profile.picture}`
+                            : 'https://res.cloudinary.com/dryh1nvhk/image/upload/v1677802098/TalkThru/Header/empty_user_icon_256_1_oytaif.png'
+                        }`}
+                        alt="avatar"
+                      />
+                    </div>
+                    <div className="flex h-full flex-col justify-between text-white">
+                      <span className="text-[14px] font-medium">
+                        Welcome Back!
+                      </span>
+                      <span className="text-[16px] font-medium">
+                        {userData?.name}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex h-full flex-col justify-between text-white">
-                    <span className="text-[14px] font-medium">
-                      Welcome Back!
-                    </span>
-                    <span className="text-[16px] font-medium">Toshi Adams</span>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </div>

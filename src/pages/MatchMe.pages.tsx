@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreateButton } from '../components/CreateButton.components';
 import { ChooseExpertise } from '../components/match-me/ChooseExpertise.components';
 import { ChooseSubject } from '../components/match-me/choose-subject/ChooseSubject.components';
 import { LookingForUser } from '../components/match-me/LookingForUser.components';
@@ -13,13 +12,8 @@ export const MatchMePage = () => {
   const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [selectedExpertise, setSelectedExpertise] = useState<string>('');
-  const {
-    userData,
-    setUserData,
-    userId,
-    subject: userSubject,
-  } = useContext(UserContext);
-  const [matchedUser, setMatchedUser] = useState<any>();
+  const { userData, setUserData, handleFetchUserData, userId, userName } =
+    useContext(UserContext);
   const [canSearch, setCanSearch] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
@@ -67,6 +61,8 @@ export const MatchMePage = () => {
 
   const handleMatchUser = async (userId: string) => {
     console.log('handleMatchingUser Called');
+    setSelectedSubject('');
+    setSelectedExpertise('');
     setIsSearching(true);
     try {
       const response = await fetch(`${server_url}/matching/match-user`, {
@@ -84,6 +80,10 @@ export const MatchMePage = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    handleFetchUserData();
+  }, []);
 
   useEffect(() => {
     handleUpdateSubject(userId, selectedSubject);
@@ -107,22 +107,23 @@ export const MatchMePage = () => {
     <>
       <div className="w-full">
         {/* Choose a Subject */}
-        {selectedSubject === '' && (
+        {!isSearching && selectedSubject === '' && (
           <ChooseSubject setSubject={setSelectedSubject} />
         )}
         {/* Choose Expertise */}
-        {selectedExpertise === '' && (
-          <>
-            {selectedSubject !== '' && (
-              <ChooseExpertise
-                subject={selectedSubject}
-                setSubject={setSelectedSubject}
-                expertise={selectedExpertise}
-                setExpertise={setSelectedExpertise}
-              />
-            )}
-          </>
+
+        {!isSearching && selectedSubject !== '' && (
+          <ChooseExpertise
+            userId={userId}
+            subject={selectedSubject}
+            setSubject={setSelectedSubject}
+            expertise={selectedExpertise}
+            setExpertise={setSelectedExpertise}
+            handleMatchUser={handleMatchUser}
+            canSearch={canSearch}
+          />
         )}
+
         {/* Looking for User */}
         {isSearching && (
           <LookingForUser
@@ -130,21 +131,6 @@ export const MatchMePage = () => {
             subject={selectedSubject}
           />
         )}
-
-        {/* Demo for updating user subject and expertise on backend */}
-        {/* <div className="mt-3 flex flex-col items-center gap-3">
-          {userData && userData.name}
-          {canSearch && (
-            <button
-              onClick={() => handleMatchUser(userId)}
-              className="border border-gray-400 p-3"
-            >
-              Find User to Match
-            </button>
-          )}
-          <div className="font-medium">Name: {matchedUser?.name || 'na'}</div>
-          {matchedUser && <CreateButton onClick={handleMatchUser} />}
-        </div> */}
       </div>
     </>
   );
