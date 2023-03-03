@@ -141,7 +141,9 @@ export const Header = () => {
                     <span className="text-[14px] font-medium">
                       Welcome Back!
                     </span>
-                    <span className="text-[16px] font-medium">Toshi Adams</span>
+                    <span className="text-[16px] font-medium">
+                      {userData.name}
+                    </span>
                   </div>
                 </div>
               </div>
