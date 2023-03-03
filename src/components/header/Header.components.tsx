@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../contexts/UserContext';
 import { HamburgerModal } from './HamburgerModal.components';
 
 // Set the URL of the backend server
@@ -8,7 +9,8 @@ const server_url = import.meta.env.VITE_BACKEND_URL as string;
 export const Header = () => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState<boolean>(false);
   const [menuLocation, setMenuLocation] = useState<string>('');
-  const [userData, setUserData] = useState<any>(null);
+  const { userData, setUserData, handleFetchUserData, userId, userName } =
+    useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -28,39 +30,6 @@ export const Header = () => {
     setIsHamburgerOpen(!isHamburgerOpen);
     navigate('/login'); // Redirect to the login page
   };
-
-  if (userData === null) {
-    return <div>Loading</div>;
-  }
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const handleFetchUserData = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) {
-            console.log('Token not found');
-            return;
-          }
-          const response = await fetch(`${server_url}/user`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          const result = await response.json();
-          if (response.ok) {
-            setUserData(result);
-            console.log(result);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      handleFetchUserData();
-    }
-  }, []);
 
   return (
     <>
