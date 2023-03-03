@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 export interface Props {
   onSubmit: (data: ProfileUpdateData) => void;
   defaultValues: ProfileUpdateData;
@@ -22,16 +21,41 @@ export const ProfileUpdateForm: React.FC<Props> = ({ onSubmit, defaultValues}) =
         setFormData(prevState => ({ ...prevState, [name]: value}));
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handlePictureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const formData = new FormData();
+
+        formData.append('file', file);
+        formData.append('upload_preset', 'talkthru');
+
+        const data = await fetch(
+
+          `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_NAME}/image/upload`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        ).then((res) => res.json());
+
+        if (!data.error) {
+          const imageURL = data.secure_url;
+          console.log('Uploaded photo ', imageURL);
+          setFormData(prevState => ({ ...prevState, picture: imageURL}));
+        }
+      }
+    }
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         onSubmit(formData);
     };
 
     return (
         <form onSubmit={handleSubmit}>
         <label>
-          Profile Picture URL:
-          <input type="text" name="picture" value={formData.picture} onChange={handleInputChange} />
+          Profile Picture:
+          <input type="file" name="picture" onChange={handlePictureUpload} />
         </label>
         <label>
           Username:
