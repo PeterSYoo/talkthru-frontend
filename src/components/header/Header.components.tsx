@@ -56,7 +56,7 @@ export const Header = () => {
 
       handleFetchUserData();
     }
-  }, [userData]);
+  }, []);
 
   return (
     <>
@@ -126,26 +126,28 @@ export const Header = () => {
                     alt="unread chat"
                   />
                 </div>
-                <div className="flex items-center gap-[15px]">
-                  <div className="h-[49px] w-[49px] rounded-[6px] border-[1.44px] border-[#E4E325] bg-gray-100">
-                    <img
-                      src={`${
-                        userData?.profile?.picture
-                          ? `${userData.profile.picture}`
-                          : 'https://res.cloudinary.com/dryh1nvhk/image/upload/v1677802098/TalkThru/Header/empty_user_icon_256_1_oytaif.png'
-                      }`}
-                      alt="avatar"
-                    />
+                {userData && (
+                  <div className="flex items-center gap-[15px]">
+                    <div className="h-[49px] w-[49px] rounded-[6px] border-[1.44px] border-[#E4E325] bg-gray-100">
+                      <img
+                        src={`${
+                          userData?.profile?.picture
+                            ? `${userData.profile.picture}`
+                            : 'https://res.cloudinary.com/dryh1nvhk/image/upload/v1677802098/TalkThru/Header/empty_user_icon_256_1_oytaif.png'
+                        }`}
+                        alt="avatar"
+                      />
+                    </div>
+                    <div className="flex h-full flex-col justify-between text-white">
+                      <span className="text-[14px] font-medium">
+                        Welcome Back!
+                      </span>
+                      <span className="text-[16px] font-medium">
+                        {userData?.name}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex h-full flex-col justify-between text-white">
-                    <span className="text-[14px] font-medium">
-                      Welcome Back!
-                    </span>
-                    <span className="text-[16px] font-medium">
-                      {userData?.name}
-                    </span>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </div>
