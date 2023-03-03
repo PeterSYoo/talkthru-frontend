@@ -142,7 +142,7 @@ export const Header = () => {
                       Welcome Back!
                     </span>
                     <span className="text-[16px] font-medium">
-                      {userData.name}
+                      {userData?.name}
                     </span>
                   </div>
                 </div>
