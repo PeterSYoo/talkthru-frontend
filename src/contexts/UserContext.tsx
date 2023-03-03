@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 
 // Set the URL of the backend server
 const server_url = import.meta.env.VITE_BACKEND_URL as string;
@@ -8,38 +8,43 @@ export const UserContext = createContext<null | any>(null);
 
 // Room provider component to manage state and provide context
 export const UserProvider = ({ children }: { children: any }) => {
-  const [userData, setUserData] = useState<any>({});
-  const { id, name, subject, expertise, matching } = userData;
+	const [userData, setUserData] = useState<any>({});
+	const { id, name, subject, expertise, matching } = userData;
 
-  const handleFetchUserData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.log('Token not found');
-        return;
-      }
-      const response = await fetch(`${server_url}/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result = await response.json();
-      if (response.ok) {
-        setUserData(result);
-        console.log(result);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+	const handleFetchUserData = async () => {
+		try {
+			const token = localStorage.getItem('token');
+			if (!token) {
+				console.log('Token not found');
+				return;
+			}
+			const response = await fetch(`${server_url}/user`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			const result = await response.json();
+			if (response.ok) {
+				setUserData(result);
+				console.log(result);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  useEffect(() => {
-    handleFetchUserData();
-  }, []);
-
-  return (
+	return (
 		<UserContext.Provider
-			value={{ userData, setUserData, userId: id, userName: name, subject, expertise, matching }}>
+			value={{
+				userData,
+				setUserData,
+				handleFetchUserData,
+				userId: id,
+				userName: name,
+				subject,
+				expertise,
+				matching,
+			}}>
 			{children}
 		</UserContext.Provider>
 	);
