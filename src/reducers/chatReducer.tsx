@@ -42,6 +42,12 @@ export const chatReducer = (state: ChatState, action: ChatAction) => {
 				...state,
 				messages: [...state.messages, action.payload.message],
 			};
+		// Adds the new note to state
+		case ADD_NOTE:
+			return {
+				...state,
+				notes: [...state.notes, action.payload.note],
+			};
 		// Updates state with the chat history from websocket server
 		case ADD_HISTORY:
 			return {
