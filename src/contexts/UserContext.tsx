@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 
 // Set the URL of the backend server
 const server_url = import.meta.env.VITE_BACKEND_URL as string;
@@ -33,12 +33,18 @@ export const UserProvider = ({ children }: { children: any }) => {
 		}
 	};
 
-	useEffect(() => {
-		handleFetchUserData();
-	}, []);
-
 	return (
-		<UserContext.Provider value={{ userId: id, userName: name, subject, expertise, matching }}>
+		<UserContext.Provider
+			value={{
+				userData,
+				setUserData,
+				handleFetchUserData,
+				userId: id,
+				userName: name,
+				subject,
+				expertise,
+				matching,
+			}}>
 			{children}
 		</UserContext.Provider>
 	);

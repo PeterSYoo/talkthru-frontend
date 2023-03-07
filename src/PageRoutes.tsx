@@ -1,9 +1,9 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { RoomProvider } from './contexts/RoomContext';
 import { ChatProvider } from './contexts/ChatContext';
 import { LandingPage } from './pages/Landing.pages';
 import { LoginPage } from './pages/Login.pages';
 import { ProfilePage } from './pages/Profile.pages';
-import { HomePage } from './pages/Home.pages';
 import { RoomPage } from './pages/Room.pages';
 import { SignUpPage } from './pages/SignUp.pages';
 import { PostMeetingPage } from './pages/PostMeeting.pages';
@@ -25,7 +25,7 @@ export const PageRoutes = () => {
   return (
     <div
       className={`${
-        isNotRoot && 'grid h-screen grid-rows-[88px_1fr]'
+        isNotRoot && 'grid h-screen grid-rows-[92px_1fr]'
       } font-poppins`}
     >
       {isNotRoot && <Header />}
@@ -37,15 +37,16 @@ export const PageRoutes = () => {
         <Route path="/reset" element={<ResetPage />} />
         <Route path="/profile/" element={<ProtectedProfilePage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/match-me" element={<ProtectedMatchMePage />} />
         <Route path="/settings" element={<ProtectedSettingsPage />} />
+        <Route path="/match-me" element={<ProtectedMatchMePage />} />
         <Route
           path="/room/:id"
           element={
-            <ChatProvider>
-              <RoomPage />
-            </ChatProvider>
+            <RoomProvider>
+              <ChatProvider>
+                <RoomPage />
+              </ChatProvider>
+            </RoomProvider>
           }
         />
         <Route path="/room/:id/postmeeting" element={<PostMeetingPage />} />

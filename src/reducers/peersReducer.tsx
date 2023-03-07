@@ -87,7 +87,11 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 				...state,
 				[action.payload.peerId]: {
 					...state[action.payload.peerId],
+					peerId: action.payload.peerId,
 					connection: action.payload.connection,
+					stream: action.payload.connection.localStream,
+					videoEnabled: action.payload.connection.localStream.getVideoTracks().length > 0,
+					audioEnabled: action.payload.connection.localStream.getAudioTracks().length > 0,
 				},
 			};
 		// Adds/updates the stream for the given peerId in state
@@ -126,6 +130,7 @@ export const peersReducer = (state: PeersState, action: PeersAction) => {
 				...state,
 				[action.payload.peerId]: {
 					...state[action.payload.peerId],
+					peerId: action.payload.peerId,
 					userName: action.payload.userName,
 				},
 			};
