@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 import { ChatContext } from '../../contexts/ChatContext';
-import { ChatBubble } from "./ChatBubble.components";
-import { ChatInput } from "./ChatInput.components";
+import { ChatMessage } from './ChatMessage.components';
+import { ChatNote } from './ChatNote.components';
+import { ChatInput } from './ChatInput.components';
 import { IMessage } from '../../types/Chat';
 
 export const Chat: React.FC = ({}) => {
@@ -37,7 +38,7 @@ export const Chat: React.FC = ({}) => {
 				<div className='flex h-[352px] w-full flex-col justify-between'>
 					<div className='max-h-full overflow-y-auto'>
 						{chat.messages.map((message: IMessage) => (
-							<ChatBubble message={message} />
+							<ChatMessage message={message} />
 						))}
 					</div>
 				</div>
