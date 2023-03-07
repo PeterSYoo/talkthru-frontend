@@ -43,11 +43,12 @@ export const Chat: React.FC = ({}) => {
 				{/* Dynamic Content Container */}
 				<div className='flex h-[352px] w-full flex-col justify-between'>
 					<div className='max-h-full overflow-y-auto'>
-						{chat.isMessagesOpen
-							? chat.messages.map((message: IMessage) => <ChatMessage message={message} />)
-							: chat.notes.map((note: INote) => {
-									<ChatNote note={note} />;
-							  })}
+						{chat.isMessagesOpen &&
+							chat.messages &&
+							chat.messages.map((message: IMessage) => <ChatMessage message={message} />)}
+						{chat.isNotesOpen &&
+							chat.notes &&
+							chat.notes.map((note: INote) => <ChatNote note={note} />)}
 					</div>
 				</div>
 				<ChatInput />
