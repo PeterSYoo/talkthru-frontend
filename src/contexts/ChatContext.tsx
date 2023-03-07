@@ -10,6 +10,11 @@ import {
 import { chatReducer } from '../reducers/chatReducer';
 import { IMessage, INote } from '../types/Chat';
 
+interface IHistory {
+	messagesHistory: IMessage[];
+	notesHistory: INote[];
+}
+
 // Create a context for sharing data across components
 export const ChatContext = createContext<null | any>(null);
 
@@ -57,8 +62,8 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	};
 
 	// Function to update chat state with old messages for new peers
-	const addHistory = (messages: IMessage[]) => {
-		chatDispatch(addHistoryAction(messages));
+	const addHistory = ({ messagesHistory, notesHistory }: IHistory) => {
+		chatDispatch(addHistoryAction(messagesHistory, notesHistory));
 	};
 
 	// Function to open/close chat messages onClick
@@ -74,12 +79,12 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	// Handles event listeners
 	useEffect(() => {
 		webSocket.on('add-message', addMessage);
-		webSocket.on('get-messages', addHistory);
+		webSocket.on('get-history', addHistory);
 
 		// Unsubscribe from listeners to prevent memory leaks
 		return () => {
 			webSocket.off('add-message');
-			webSocket.off('get-messages');
+			webSocket.off('get-history');
 		};
 	}, []);
 
