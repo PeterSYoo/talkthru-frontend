@@ -94,14 +94,14 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		peersDispatch(addPeerNameAction(peer.peerId, peer.userName));
 
 		// Add the new call/connection object to peers state
-		dispatch(addPeerConnectionAction(peer.peerId, call));
+		peersDispatch(addPeerConnectionAction(peer.peerId, call));
 
 		// console.log({ ['sendConnection']: 'Listening for incoming stream' });
 		// Register an event listener for the peer stream
 		call.on('stream', (peerStream) => {
 			// console.log({ ['sendConnection']: 'Received incoming stream --> Dispatched' });
 			// Add the new peer's stream to peers state
-			dispatch(addPeerStreamAction(peer.peerId, peerStream));
+			peersDispatch(addPeerStreamAction(peer.peerId, peerStream));
 		});
 	};
 
