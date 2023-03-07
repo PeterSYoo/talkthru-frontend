@@ -2,12 +2,13 @@ import { createContext, useEffect, useReducer } from 'react';
 import { webSocket } from '../webSocket';
 import {
 	addMessageAction,
+	addNoteAction,
 	addHistoryAction,
 	toggleMessagesAction,
 	toggleNotesAction,
 } from '../reducers/chatActions';
 import { chatReducer } from '../reducers/chatReducer';
-import { IMessage } from '../types/Chat';
+import { IMessage, INote } from '../types/Chat';
 
 // Create a context for sharing data across components
 export const ChatContext = createContext<null | any>(null);
@@ -36,6 +37,18 @@ export const ChatProvider = ({ children }: { children: any }) => {
 
 		// Emit event with data
 		webSocket.emit('send-message', roomId, messageData);
+	};
+
+	const sendNote = (note: string, roomId: string, authorId: string) => {
+		const noteData: INote = {
+			content: note,
+			timestamp: new Date().getTime(),
+			authorId,
+		};
+
+		chatDispatch(addNoteAction(noteData));
+
+		webSocket.emit('send-note', roomId, noteData);
 	};
 
 	// Function to update chat state with a new message

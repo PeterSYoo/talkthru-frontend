@@ -15,7 +15,7 @@ export const UserProvider = ({ children }: { children: any }) => {
 		try {
 			const token = localStorage.getItem('token');
 			if (!token) {
-				console.log('Token not found');
+				// console.log('Token not found');
 				return;
 			}
 			const response = await fetch(`${server_url}/user`, {
@@ -26,7 +26,7 @@ export const UserProvider = ({ children }: { children: any }) => {
 			const result = await response.json();
 			if (response.ok) {
 				setUserData(result);
-				console.log(result);
+				// console.log(result);
 			}
 		} catch (error) {
 			console.error(error);
