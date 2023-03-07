@@ -53,7 +53,7 @@ export const ChatProvider = ({ children }: { children: any }) => {
 
 		chatDispatch(addNoteAction(noteData));
 
-		webSocket.emit('send-note', roomId, noteData);
+		webSocket.emit('send-note', authorId, noteData);
 	};
 
 	// Function to update chat state with a new message
@@ -89,7 +89,7 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	}, []);
 
 	return (
-		<ChatContext.Provider value={{ chat, sendMessage, toggleMessages, toggleNotes }}>
+		<ChatContext.Provider value={{ chat, sendMessage, sendNote, toggleMessages, toggleNotes }}>
 			{children}
 		</ChatContext.Provider>
 	);
