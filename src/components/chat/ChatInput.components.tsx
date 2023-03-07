@@ -19,12 +19,15 @@ export const ChatInput: React.FC = () => {
 				className='mx-auto flex h-[39px] w-[285px] items-center gap-[8px] rounded-full bg-[#E1E0E0] px-[12px]'
 				onSubmit={(e) => {
 					e.preventDefault();
+
+					// Dynamically handles userInput
 					if (chat.isMessagesOpen) {
 						sendMessage(userInput, roomId, userId);
 					} else {
 						sendNote(userInput, roomId, userId);
 					}
 
+					// Resets userInput state
 					setUserInput('');
 				}}>
 				{/* Camera Container */}
