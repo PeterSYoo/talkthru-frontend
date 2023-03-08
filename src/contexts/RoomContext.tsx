@@ -37,7 +37,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	// State to keep track of the peer who is currently screen sharing
 	const [screenSharingId, setScreenSharingId] = useState<string>('');
 	// State to keep track of data for remote peers
-	const [peers, dispatch] = useReducer(peersReducer, {});
+	const [peers, peersDispatch] = useReducer(peersReducer, {});
 	// State to keep track of the room ID for the local peer
 	const [roomId, setRoomId] = useState<string>('');
 	const [matchedUserId, setMatchedUserId] = useState<any>();
@@ -91,17 +91,17 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		console.log({ call });
 
 		// Add the new peer's name to peers state
-		dispatch(addPeerNameAction(peer.peerId, peer.userName));
+		peersDispatch(addPeerNameAction(peer.peerId, peer.userName));
 
 		// Add the new call/connection object to peers state
-		dispatch(addPeerConnectionAction(peer.peerId, call));
+		peersDispatch(addPeerConnectionAction(peer.peerId, call));
 
 		// console.log({ ['sendConnection']: 'Listening for incoming stream' });
 		// Register an event listener for the peer stream
 		call.on('stream', (peerStream) => {
 			// console.log({ ['sendConnection']: 'Received incoming stream --> Dispatched' });
 			// Add the new peer's stream to peers state
-			dispatch(addPeerStreamAction(peer.peerId, peerStream));
+			peersDispatch(addPeerStreamAction(peer.peerId, peerStream));
 		});
 	};
 
@@ -111,10 +111,10 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 		// Update peers state with properties from metadata
 		const { userName } = call.metadata;
-		dispatch(addPeerNameAction(call.peer, userName));
+		peersDispatch(addPeerNameAction(call.peer, userName));
 
 		// Add the incoming call/connection to peers state
-		dispatch(addPeerConnectionAction(call.peer, call));
+		peersDispatch(addPeerConnectionAction(call.peer, call));
 
 		// Respond to the incoming call with the local stream
 		call.answer(stream);
@@ -124,7 +124,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		call.on('stream', (peerStream) => {
 			// console.log({ ['receiveConnection']: 'Received incoming stream --> Dispatched' });
 			// Add the incoming peer's stream to peers state
-			dispatch(addPeerStreamAction(call.peer, peerStream));
+			peersDispatch(addPeerStreamAction(call.peer, peerStream));
 		});
 	};
 
@@ -144,7 +144,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	// Function to remove a peer from the application's state
 	const removePeer = (peerId: string) => {
 		// Dispatching an action to remove the peer from the state
-		dispatch(removePeerAction(peerId));
+		peersDispatch(removePeerAction(peerId));
 	};
 
 	const updateMediaStream = async ({
