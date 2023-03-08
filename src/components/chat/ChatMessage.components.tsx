@@ -1,27 +1,20 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { RoomContext } from '../../contexts/RoomContext';
+import { IMessage } from '../../types/Chat';
 
-// Type definition for a message
-interface IMessage {
-	content: string;
-	author?: string;
-	timestamp: number;
-}
-
-export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
+export const ChatMessage: React.FC<{ message: IMessage }> = ({ message }) => {
 	// Destructure context for the props we need
 	const { userId } = useContext(UserContext);
 	const { peers } = useContext(RoomContext);
 
-	// Use message prop to define elements of the chat bubble
-	const author = message.author && peers[message.author];
-	const authorName = author?.userName || 'anonymous';
-	const time = new Date(message.timestamp).toLocaleTimeString();
-
 	// Boolean to dynamically determine styling for the chat bubble
-	// Uses optional chaining to make sure 'me' exists before reading it's properties to prevent a TypeError
-	const isSelf = message.author === userId;
+	const isSelf = message.authorId === userId;
+
+	// Use message prop to define elements of the chat bubble
+	const author = message.authorId && peers[message.authorId];
+	const authorName = isSelf ? 'You' : author?.userName || 'Anonymous';
+	const time = new Date(message.timestamp).toLocaleTimeString();
 
 	return (
 		<>
@@ -30,9 +23,9 @@ export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 				className={`my-2 flex font-archivo ${
 					isSelf ? 'mr-[21px] justify-end pl-9' : 'ml-[19px] justify-start pr-9'
 				}`}>
-				{/* Chat Bubble Container */}
+				{/* Message Container */}
 				<div className='flex flex-col'>
-					{/* Message Container */}
+					{/* Content Container */}
 					<div
 						className={`shadow-[0px 1px 6px 0px rgba(0, 0, 0, 0.25)] inline-block rounded p-[10px] text-[14px] ${
 							isSelf ? 'bg-[#EFD38A]' : 'bg-[#E4E325]'
@@ -44,9 +37,7 @@ export const ChatBubble: React.FC<{ message: IMessage }> = ({ message }) => {
 						</div>
 					</div>
 					{/* Author Container */}
-					<div className={`text-xs  ${isSelf ? 'text-right' : 'text-left'}`}>
-						{isSelf ? 'You' : authorName}
-					</div>
+					<div className={`text-xs  ${isSelf ? 'text-right' : 'text-left'}`}>{authorName}</div>
 				</div>
 			</div>
 		</>

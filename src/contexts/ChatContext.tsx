@@ -1,13 +1,18 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { webSocket } from '../webSocket';
-import { addMessageAction, addHistoryAction, toggleChatAction } from '../reducers/chatActions';
+import {
+	addMessageAction,
+	addNoteAction,
+	addHistoryAction,
+	toggleMessagesAction,
+	toggleNotesAction,
+} from '../reducers/chatActions';
 import { chatReducer } from '../reducers/chatReducer';
+import { IMessage, INote } from '../types/Chat';
 
-// Type definition for a message
-interface IMessage {
-	content: string;
-	author?: string;
-	timestamp: number;
+interface IHistory {
+	messagesHistory: IMessage[];
+	notesHistory: INote[];
 }
 
 // Create a context for sharing data across components
@@ -18,16 +23,18 @@ export const ChatProvider = ({ children }: { children: any }) => {
 	// State to keep track of chat messages for a room
 	const [chat, chatDispatch] = useReducer(chatReducer, {
 		messages: [],
-		isChatOpen: false,
+		notes: [],
+		isMessagesOpen: false,
+		isNotesOpen: false,
 	});
 
 	// Function to emit chat message to websocket server when onSubmit triggers in ChatInput
-	const sendMessage = (message: string, roomId: string, author: string) => {
+	const sendMessage = (message: string, roomId: string, authorId: string) => {
 		// Construct new IMessage object
 		const messageData: IMessage = {
 			content: message,
 			timestamp: new Date().getTime(),
-			author,
+			authorId,
 		};
 
 		// Update chat state
@@ -37,35 +44,52 @@ export const ChatProvider = ({ children }: { children: any }) => {
 		webSocket.emit('send-message', roomId, messageData);
 	};
 
+	const sendNote = (note: string, roomId: string, authorId: string) => {
+		const noteData: INote = {
+			content: note,
+			timestamp: new Date().getTime(),
+			authorId,
+		};
+
+		chatDispatch(addNoteAction(noteData));
+
+		webSocket.emit('send-note', authorId, noteData);
+	};
+
 	// Function to update chat state with a new message
 	const addMessage = (message: IMessage) => {
 		chatDispatch(addMessageAction(message));
 	};
 
 	// Function to update chat state with old messages for new peers
-	const addHistory = (messages: IMessage[]) => {
-		chatDispatch(addHistoryAction(messages));
+	const addHistory = ({ messagesHistory, notesHistory }: IHistory) => {
+		chatDispatch(addHistoryAction(messagesHistory, notesHistory));
 	};
 
-	// Function to update chat state to the opposite of what it currently is
-	const toggleChat = () => {
-		chatDispatch(toggleChatAction(!chat.isChatOpen));
+	// Function to open/close chat messages onClick
+	const toggleMessages = () => {
+		chatDispatch(toggleMessagesAction(!chat.isMessagesOpen));
+	};
+
+	// Function to open/close chat notes onClick
+	const toggleNotes = () => {
+		chatDispatch(toggleNotesAction(!chat.isNotesOpen));
 	};
 
 	// Handles event listeners
 	useEffect(() => {
 		webSocket.on('add-message', addMessage);
-		webSocket.on('get-messages', addHistory);
+		webSocket.on('get-history', addHistory);
 
 		// Unsubscribe from listeners to prevent memory leaks
 		return () => {
 			webSocket.off('add-message');
-			webSocket.off('get-messages');
+			webSocket.off('get-history');
 		};
 	}, []);
 
 	return (
-		<ChatContext.Provider value={{ chat, sendMessage, toggleChat }}>
+		<ChatContext.Provider value={{ chat, sendMessage, sendNote, toggleMessages, toggleNotes }}>
 			{children}
 		</ChatContext.Provider>
 	);

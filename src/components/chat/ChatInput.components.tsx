@@ -5,12 +5,12 @@ import { UserContext } from '../../contexts/UserContext';
 
 export const ChatInput: React.FC = () => {
 	// State for user's chat input
-	const [message, setMessage] = useState<string>('');
+	const [userInput, setUserInput] = useState<string>('');
 
 	// Destructure context for the props we need
-	const { id: userId } = useContext(UserContext);
+	const { userId } = useContext(UserContext);
 	const { roomId } = useContext(RoomContext);
-	const { sendMessage } = useContext(ChatContext);
+	const { chat, sendMessage, sendNote } = useContext(ChatContext);
 
 	return (
 		<>
@@ -19,8 +19,16 @@ export const ChatInput: React.FC = () => {
 				className='mx-auto flex h-[39px] w-[285px] items-center gap-[8px] rounded-full bg-[#E1E0E0] px-[12px]'
 				onSubmit={(e) => {
 					e.preventDefault();
-					sendMessage(message, roomId, userId);
-					setMessage('');
+
+					// Dynamically handles userInput
+					if (chat.isMessagesOpen) {
+						sendMessage(userInput, roomId, userId);
+					} else {
+						sendNote(userInput, roomId, userId);
+					}
+
+					// Resets userInput state
+					setUserInput('');
 				}}>
 				{/* Camera Container */}
 				<div className='h-[28px] w-[28px]'>
@@ -33,8 +41,8 @@ export const ChatInput: React.FC = () => {
 				<input
 					className='w-[160px] bg-[#E1E0E0] font-openSans leading-[19px] focus:outline-none'
 					placeholder='Message...'
-					onChange={(e) => setMessage(e.target.value)}
-					value={message}
+					onChange={(e) => setUserInput(e.target.value)}
+					value={userInput}
 				/>
 				{/* Attachment Container */}
 				<div className='h-[28px] w-[28px]'>
