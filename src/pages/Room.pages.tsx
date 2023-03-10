@@ -1,24 +1,15 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { webSocket } from '../webSocket';
 import { UserContext } from '../contexts/UserContext';
 import { RoomContext } from '../contexts/RoomContext';
 import { ChatContext } from '../contexts/ChatContext';
 import { PeersState } from '../reducers/peersReducer';
-import { VideoPlayer } from '../components/VideoPlayer.components';
-import { ShareScreenButton } from '../components/ShareScreenButton.components';
 import { ChatButton } from '../components/ChatButton.components';
 import { Chat } from '../components/chat/Chat.components';
 import { PrimaryDisplay } from '../components/video/PrimaryDisplay.components';
 import { SecondaryDisplay } from '../components/video/SecondaryDisplay.components';
-
-interface IPeer {
-	peerId: string;
-	userName?: string;
-	stream?: MediaStream;
-	videoEnabled?: boolean;
-	audioEnabled?: boolean;
-}
+import { ConfirmLeaveModal } from '../components/room-page/ConfirmLeaveModal.components';
 
 export const RoomPage = () => {
 	// Destructure the `id` from the URL parameters using `useParams` hook.
@@ -29,6 +20,9 @@ export const RoomPage = () => {
 	const { me, stream, screenStream, screenSharingId, peers, shareScreen, setRoomId } =
 		useContext(RoomContext);
 	const { chat, toggleMessages, toggleNotes } = useContext(ChatContext);
+
+	// Define states for Room
+	const [showLeaveModal, setShowLeaveModal] = useState<boolean>(false);
 
 	useEffect(() => {
 		handleFetchUserData();
@@ -180,14 +174,13 @@ export const RoomPage = () => {
 					</div>
 
 					{/* Right Container */}
-					<a href={`/room/${id}/postmeeting`} className=''>
-						<button
-							className='h-[40px] w-[135px] rounded-[10px] bg-[#ED1F0E] text-[18px] text-white shadow-meeting-room'
-							onClick={() => console.log('Leave Room button clicked')}>
-							Leave
-						</button>
-					</a>
+					<button
+						className='h-[40px] w-[135px] rounded-[10px] bg-[#ED1F0E] text-[18px] text-white shadow-meeting-room'
+						onClick={() => setShowLeaveModal(true)}>
+						Leave
+					</button>
 				</div>
+				{showLeaveModal && <ConfirmLeaveModal setIsOpen={setShowLeaveModal} />}
 			</div>
 		</>
 	);
