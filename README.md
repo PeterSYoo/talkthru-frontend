@@ -5,18 +5,6 @@
 - [Front-End](https://github.com/PeterSYoo/talkthru-frontend)
 - [Back-End](https://github.com/aparks4/talkthru-backend)
 
-### Pain Point:
-
-Many students often experience a
-lack of academic support, and feel they need additional resources when it comes to
-their studies.
-
-### Solution:
-
-- TalkThru is a peer-to-peer webchat service concerned with connecting users with study partners.
-- TalkThru processes the subject matter that you’re working on, as well as your level of expertise.
-- After doing so, TalkThru automatically pairs you with a study partner according to these selections.
-
 ## Team Members
 
 - [Peter Yoo](https://github.com/PeterSYoo) - Full Stack Software Engineer
@@ -52,6 +40,18 @@ their studies.
 - Cloudinary
 
 ## App Features
+
+### Pain Point:
+
+Many students often experience a
+lack of academic support, and feel they need additional resources when it comes to
+their studies.
+
+### Solution:
+
+- TalkThru is a peer-to-peer webchat service concerned with connecting users with study partners.
+- TalkThru processes the subject matter that you’re working on, as well as your level of expertise.
+- After doing so, TalkThru automatically pairs you with a study partner according to these selections.
 
 ### User Can:
 
