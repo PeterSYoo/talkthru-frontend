@@ -40,7 +40,6 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	const [peers, peersDispatch] = useReducer(peersReducer, {});
 	// State to keep track of the room ID for the local peer
 	const [roomId, setRoomId] = useState<string>('');
-	const [matchedUserId, setMatchedUserId] = useState<any>();
 
 	// Destructure context for the props we need
 	const { userName, userId, userData, setUserData } = useContext(UserContext);
@@ -48,6 +47,10 @@ export const RoomProvider = ({ children }: { children: any }) => {
 	// Function to join a room when room is created or when a user is matched
 	const enterRoom = ({ roomId }: { roomId: string }) => {
 		navigate(`/room/${roomId}`);
+	};
+
+	const leaveRoom = () => {
+		navigate(`/room/${roomId}/postmeeting`);
 	};
 
 	const handleUpdateRoomId = async (id: string, roomId: string) => {
@@ -96,10 +99,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		// Add the new call/connection object to peers state
 		peersDispatch(addPeerConnectionAction(peer.peerId, call));
 
-		// console.log({ ['sendConnection']: 'Listening for incoming stream' });
 		// Register an event listener for the peer stream
 		call.on('stream', (peerStream) => {
-			// console.log({ ['sendConnection']: 'Received incoming stream --> Dispatched' });
 			// Add the new peer's stream to peers state
 			peersDispatch(addPeerStreamAction(peer.peerId, peerStream));
 		});
@@ -119,10 +120,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		// Respond to the incoming call with the local stream
 		call.answer(stream);
 
-		// console.log({ ['receiveConnection']: 'Listening for incoming stream' });
 		// Register an event listener for the peer to send their stream
 		call.on('stream', (peerStream) => {
-			// console.log({ ['receiveConnection']: 'Received incoming stream --> Dispatched' });
 			// Add the incoming peer's stream to peers state
 			peersDispatch(addPeerStreamAction(call.peer, peerStream));
 		});
@@ -136,7 +135,6 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		Object.values(participants).forEach((peer: IPeer) => {
 			// Make sure a connection is not already established
 			if (peer.peerId in peers || peer.peerId === userId) return;
-			// console.log({ ['getUsers']: 'sendConnection called' }, { peer });
 			sendConnection(peer);
 		});
 	};
@@ -208,18 +206,8 @@ export const RoomProvider = ({ children }: { children: any }) => {
 
 	// useEffect hook initializes the local peer and media stream
 	useEffect(() => {
-		// console.log({ ['Basic useEffect']: 'Triggered' });
 		// Create a new Peer instance with userId state
 		const newPeer = new Peer(userId);
-		// const newPeer = new Peer(userId, {
-		// 	host: 'localhost',
-		// 	port: 8080,
-		// 	path: '/',
-		// });
-
-		// newPeer.on('open', (peerId) => {
-		// 	console.log('Connected to signaling server!', { peerId });
-		// });
 
 		// Store the local peer instance in the state
 		setMe(newPeer);
@@ -256,19 +244,13 @@ export const RoomProvider = ({ children }: { children: any }) => {
 		if (!me || !stream) return;
 
 		// Register a Peer listener for incoming calls
-		me.on('call', (call) => {
-			// console.log({ ['me/stream useEffect']: 'Received incoming call' }, { call });
-			receiveConnection(call);
-		});
+		me.on('call', receiveConnection);
 
 		// Register a Socket listener to get data for other users in the room
 		webSocket.on('get-users', getUsers);
 
 		// Register a Socket listener to connect with a new peer that joins the room
-		webSocket.on('user-joined', (peer) => {
-			// console.log({ ['me/stream useEffect']: 'user-joined --> sendConnection called' });
-			sendConnection(peer);
-		});
+		webSocket.on('user-joined', sendConnection);
 
 		return () => {
 			webSocket.off('user-joined');
@@ -304,6 +286,7 @@ export const RoomProvider = ({ children }: { children: any }) => {
 				roomId,
 				shareScreen,
 				setRoomId,
+				leaveRoom,
 			}}>
 			{children}
 		</RoomContext.Provider>

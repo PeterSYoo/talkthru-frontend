@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Set the URL of the backend server
 const server_url = import.meta.env.VITE_BACKEND_URL as string;
@@ -10,6 +11,7 @@ export const UserContext = createContext<null | any>(null);
 export const UserProvider = ({ children }: { children: any }) => {
 	const [userData, setUserData] = useState<any>({});
 	const { id, name, subject, expertise, matching } = userData;
+	const navigate = useNavigate();
 
 	const handleFetchUserData = async () => {
 		try {
@@ -33,6 +35,34 @@ export const UserProvider = ({ children }: { children: any }) => {
 		}
 	};
 
+	const handleResetSearchCriteria = async () => {
+		console.log('handleResetSearchCriteria Called');
+		try {
+			const response = await fetch(`${server_url}/matching/update-criteria`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					id,
+					subject: '',
+					expertise: '',
+					matching: false,
+					roomId: '',
+				}),
+			});
+
+			if (response.ok) {
+				const result = await response.json();
+				console.log({ result });
+				setUserData(result);
+				navigate('/match-me/');
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	return (
 		<UserContext.Provider
 			value={{
@@ -44,6 +74,7 @@ export const UserProvider = ({ children }: { children: any }) => {
 				subject,
 				expertise,
 				matching,
+				handleResetSearchCriteria,
 			}}>
 			{children}
 		</UserContext.Provider>
